@@ -16,19 +16,12 @@ import Combine
 class TipViewModel: ObservableObject {
     
     var tipChoices = ["10", "15", "20"]
-
-//    let tipChoices: [Any] = [10, 15, 20, "Custom"]
-//    let tipChoices = [10, 15, 20]
-
     @Published var billAmount: String = ""
-//    @Published var tipPercentage: Int = 10
-    @Published var tipPercentage: Double = 0//"0"
+    @Published var tipPercentage: Double = 0
     @Published var person: String = "1"
     
     var tipAmount: Double {
         guard let billAmount = Double(billAmount) else { return 0 }
-//        guard let tipPercentage = Double(tipPercentage) else { return 0 }
-
         let tipAmount = billAmount * tipPercentage / 100
         return tipAmount
     }
