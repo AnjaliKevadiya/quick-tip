@@ -16,9 +16,22 @@ import Combine
 class TipViewModel: ObservableObject {
     
     var tipChoices = ["10", "15", "20"]
-    @Published var billAmount: String = ""
+    
+    @Published var billAmount: String = "" {
+        didSet {
+            if billAmount.count > 7 && oldValue.count <= 7 {
+                billAmount = oldValue
+            }
+        }
+    }
     @Published var tipPercentage: Double = 0
-    @Published var person: String = "1"
+    @Published var person: String = "1" {
+        didSet {
+            if person.count > 3{
+                person = oldValue
+            }
+        }
+    }
     
     var tipAmount: Double {
         guard let billAmount = Double(billAmount) else { return 0 }

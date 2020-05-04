@@ -18,15 +18,23 @@ struct ContentView: View {
         return true
     }
 
-    let textFieldCharacterLimit = 7
+    private var currencyFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .currency
+        return f
+    }()
 
     @State private var isShowCloseButton = false
     @ObservedObject var tipViewModel = TipViewModel()
-//    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     //Use of ObservedObject which means any time TipViewModel will update it will render the body again
     
     init() {
-        UITextField.appearance().tintColor = .black
+        if colorScheme == .dark {
+            UITextField.appearance().tintColor = .gray
+        } else {
+            UITextField.appearance().tintColor = .black
+        }
         
 //        let design = UIFontDescriptor.SystemDesign.rounded
 //        let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .largeTitle)
@@ -40,10 +48,16 @@ struct ContentView: View {
         NavigationView {
 
             ZStack{
-                Color.offWhite
-//                    .background(colorScheme == .dark ? Color.black : Color.white)
-                .edgesIgnoringSafeArea(.all)
-                .modifier(DismissKeyboard())
+                if colorScheme == .dark {
+                    Color.darkEnd
+                        .edgesIgnoringSafeArea(.all)
+                        .modifier(DismissKeyboard())
+
+                } else {
+                    Color.offWhite
+                        .edgesIgnoringSafeArea(.all)
+                        .modifier(DismissKeyboard())
+                }
 //                .gesture(DragGesture().onChanged{_ in
 //                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 //                })
@@ -54,13 +68,21 @@ struct ContentView: View {
                             self.isShowCloseButton.toggle()
                         })
                         .padding(20)
-                            .padding(.top, 3)
+                        .padding(.top, 3)
                         .padding(.leading, 26)
-                        .frame(height: hasSafeArea ? 66 : 56)
+                        .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
+                        .frame(height: hasSafeArea ? 68 : 56)
                         .font(.system(size: hasSafeArea ? 18 : 16, weight: .medium, design: .rounded))
-                        .disabled(tipViewModel.billAmount.count > (textFieldCharacterLimit - 1))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 6)
+                                .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightGray2, radius: 3, x: 6, y: 6)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white, radius: 2, x: -4, y: -4)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                        )
                         .modifier(TextFieldModifier())
-
+                        
                         HStack {
                             LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
                                 .mask(Text("$").font(.system(size: 26, weight: .semibold, design: .rounded))
@@ -83,23 +105,19 @@ struct ContentView: View {
                             }.padding(.horizontal, 20)
                         }
                     }
-                    .padding(.bottom, hasSafeArea ? 20 : 5)
+                    .padding(.bottom, hasSafeArea ? 15 : 5)
 
                     ZStack{
                         Rectangle()
-                            .fill(Color.white)
-//                            .fill(colorScheme == .dark ? Color.black : Color.white)
+                            .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
+                            .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .opacity(0.5)
-//                            .opacity(colorScheme == .dark ? 0.8 : 0.5)
                             .frame(minWidth:0, maxWidth: .infinity, minHeight: hasSafeArea ? 100 : 80, maxHeight: hasSafeArea ? 120 : 90)
-//                            if colorScheme == .dark {
-//                                .shadow(color: Color.darkStart, radius: 10, x: 5, y: 5)
-//                                .shadow(color: Color.darkEnd, radius: 10, x: -5, y: -5)
-//                            } else {
-                                .shadow(color: Color.white.opacity(0.5), radius: 5, x: -5, y: -5)
-                                .shadow(color: Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
-//                            }
+//                        .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
+//                        .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: colorScheme == .dark ? 5 : 5, x: 5, y: 5)
+
+                            .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: 5, y: 5)
+                            .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: -5, y: -5)
 
                         VStack {
                             HStack {
@@ -118,7 +136,6 @@ struct ContentView: View {
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.darkBlueColor)
                             }
-//                            .padding(.top, 15)
                             ZStack {
                                 LinearGradient(
                                     gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]),
@@ -133,7 +150,7 @@ struct ContentView: View {
 
                         }.padding(.horizontal, 15)
                     }
-                    .padding(.bottom, hasSafeArea ? 10 : 5)
+                    .padding(.bottom, hasSafeArea ? -6 : 5)
                     Spacer()
 
                     if hasSafeArea{
@@ -146,7 +163,7 @@ struct ContentView: View {
                                         .font(.system(size: 32, weight: .semibold, design: .rounded))
                                         .foregroundColor(.darkBlueColor)
                         }
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 6)
                     } else {
                         HStack{
 
@@ -164,20 +181,15 @@ struct ContentView: View {
 
                     ZStack{
                         Rectangle()
-                            .fill(Color.white)
-//                            .fill(colorScheme == .dark ? Color.black : Color.white)
+                            .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
+                            .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .opacity(0.5)
-//                            .opacity(colorScheme == .dark ? 0.8 : 0.5)
                             .frame(minWidth:0, maxWidth: 250, minHeight: hasSafeArea ? 100 : 80, maxHeight: hasSafeArea ? 120 : 90)
-                            
-//                        if colorScheme == .dark {
-//                            .shadow(color: Color.darkStart, radius: 10, x: 5, y: 5)
-//                            .shadow(color: Color.darkEnd, radius: 10, x: -5, y: -5)
-//                        } else {
-                            .shadow(color: Color.white.opacity(0.5), radius: 5, x: -5, y: -5)
-                            .shadow(color: Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
-//                        }
+//                        .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
+//                        .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: colorScheme == .dark ? 5 : 5, x: 5, y: 5)
+
+                            .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: 5, y: 5)
+                            .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: -5, y: -5)
 
                         VStack {
                             Text("How many persons?")
@@ -219,7 +231,6 @@ struct ContentView: View {
                             }
                         }
                     }
-//                    .padding(.top, hasSafeArea ? -10 : -5)
                     Spacer()
 
                     VStack {
@@ -247,9 +258,9 @@ struct ContentView: View {
                                     
                                     Rectangle()
                                         .frame(width: 1, height: 60)
-                                        .foregroundColor(Color(red: 236/255, green: 234/255, blue: 235/255))
-                                        .shadow(color: Color.lightPurple.opacity(0.2), radius: 1, x: -1, y: -1)
-                                        .shadow(color: Color.lightPurple.opacity(0.2), radius: 1, x: 1, y: 1)
+                                        .foregroundColor(colorScheme == .dark ? Color.darkEnd.opacity(0.2) : Color.lightGray1)
+                                        .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.2), radius: 1, x: -1, y: -1)
+                                        .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.2), radius: 1, x: 1, y: 1)
 
                                     VStack {
                                         Text("Total")
@@ -269,9 +280,11 @@ struct ContentView: View {
                             
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color(red: 236/255, green: 234/255, blue: 235/255), lineWidth: 2)
-                                    .shadow(color: Color.white.opacity(0.4), radius: 2, x: -1, y: -1)
-                                    .shadow(color: Color.lightPurple.opacity(0.5), radius: 2, x: 1, y: 1)
+                                    .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 2)
+                                    .shadow(color: colorScheme == .dark ? Color.darkestGray.opacity(0.5) : Color.white, radius: colorScheme == .dark ? 3 : 2, x: colorScheme == .dark ? -2 : -1, y: colorScheme == .dark ? -2 : -1)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple, radius: colorScheme == .dark ? 3 : 2, x: colorScheme == .dark ? 2 : 1, y: colorScheme == .dark ? 2 : 1)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
                             )
                     }
 
@@ -306,13 +319,15 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
 
         ContentView()
-            .environment(\.colorScheme, .dark)
+//            .environment(\.colorScheme, .dark)
     }
 }
 #endif
 
 extension Color {
     static let offWhite = Color(red: 240 / 255, green: 240 / 255, blue: 243 / 255)
+    static let lightGray1 = Color(red: 236/255, green: 234/255, blue: 235/255)
+    static let lightGray2 = Color(red: 192/255, green: 189/255, blue: 191/255)
     static let lightPurple = Color(red: 174 / 255, green: 174 / 255, blue: 192 / 255)
     static let peachColor = Color(red: 222 / 255, green: 136 / 255, blue: 149 / 255)
     static let darkPeachColor = Color(red: 188 / 255, green: 94 / 255, blue: 125 / 255)
@@ -323,7 +338,9 @@ extension Color {
     static let blueGradient = LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
 
 //    static let darkStart = Color(red: 50 / 255, green: 60 / 255, blue: 65 / 255)
-//    static let darkEnd = Color(red: 25 / 255, green: 25 / 255, blue: 30 / 255)
+    static let darkStart = Color(red: 61 / 255, green: 62 / 255, blue: 68 / 255)
+    static let darkEnd = Color(red: 48 / 255, green: 49 / 255, blue: 53 / 255)
+    static let darkestGray = Color(red: 25 / 255, green: 25 / 255, blue: 30 / 255)
 
 }
 

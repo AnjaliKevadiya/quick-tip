@@ -11,17 +11,16 @@ import SwiftUI
 struct TextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .background(Color.offWhite)
             .cornerRadius(15)
             .keyboardType(.decimalPad)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color(red: 236/255, green: 234/255, blue: 235/255), lineWidth: 4)
-                    .shadow(color: Color(red: 192/255, green: 189/255, blue: 191/255), radius: 3, x: 6, y: 6)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .shadow(color: Color.white, radius: 2, x: -4, y: -4)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-            )
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 15)
+//                    .stroke(Color(red: 236/255, green: 234/255, blue: 235/255), lineWidth: 4)
+//                    .shadow(color: Color(red: 192/255, green: 189/255, blue: 191/255), radius: 3, x: 6, y: 6)
+//                    .clipShape(RoundedRectangle(cornerRadius: 15))
+//                    .shadow(color: Color.white, radius: 2, x: -4, y: -4)
+//                    .clipShape(RoundedRectangle(cornerRadius: 15))
+//            )
 //            .foregroundColor(.black)
 //            .background(
 //                RoundedRectangle(cornerRadius: 15)
