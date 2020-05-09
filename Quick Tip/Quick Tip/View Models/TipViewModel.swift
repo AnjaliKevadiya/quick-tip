@@ -19,11 +19,12 @@ class TipViewModel: ObservableObject {
     
     @Published var billAmount: String = "" {
         didSet {
-            if billAmount.count > 7 && oldValue.count <= 7 {
+            if billAmount.count > 6 && oldValue.count <= 6 {
                 billAmount = oldValue
             }
         }
     }
+    
     @Published var tipPercentage: Double = 0
     @Published var person: String = "1" {
         didSet {
@@ -33,6 +34,42 @@ class TipViewModel: ObservableObject {
         }
     }
     
+    private var subCancellable1: AnyCancellable!
+    private var subCancellable2 : AnyCancellable!
+    private var validCharSetForAmount = CharacterSet(charactersIn: "1234567890.")
+    private var validCharSetForPerson = CharacterSet(charactersIn: "1234567890")
+
+    init() {
+        subCancellable1 = $billAmount.sink { val in
+            //check if the new string contains any invalid characters
+            if val.rangeOfCharacter(from: self.validCharSetForAmount.inverted) != nil {
+                //clean the string (do this on the main thread to avoid overlapping with the current ContentView update cycle)
+                DispatchQueue.main.async {
+                    self.billAmount = String(self.billAmount.unicodeScalars.filter {
+                        self.validCharSetForAmount.contains($0)
+                    })
+                }
+            }
+        }
+        
+        subCancellable2 = $person.sink { val in
+            //check if the new string contains any invalid characters
+            if val.rangeOfCharacter(from: self.validCharSetForPerson.inverted) != nil {
+                //clean the string (do this on the main thread to avoid overlapping with the current ContentView update cycle)
+                DispatchQueue.main.async {
+                    self.person = String(self.person.unicodeScalars.filter {
+                        self.validCharSetForPerson.contains($0)
+                    })
+                }
+            }
+        }
+    }
+
+    deinit {
+        subCancellable1.cancel()
+        subCancellable2.cancel()
+    }
+
     var tipAmount: Double {
         guard let billAmount = Double(billAmount) else { return 0 }
         let tipAmount = billAmount * tipPercentage / 100
@@ -40,8 +77,8 @@ class TipViewModel: ObservableObject {
     }
 
     var totalAmount: Double {
-        guard let bill = Double(billAmount) else { return 0 }
-        let total = bill + tipAmount
+        guard let billAmount = Double(billAmount) else { return 0 }
+        let total = billAmount + tipAmount
         return total
     }
     
