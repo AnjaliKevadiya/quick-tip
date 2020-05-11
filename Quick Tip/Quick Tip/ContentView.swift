@@ -91,7 +91,7 @@ struct ContentView: View {
                         .padding(.top, 3)
                         .padding(.leading, 26)
                         .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
-                            .frame(height: deviceXOrLater ? 68 : 60)
+                            .frame(height: hasSafeArea ? 68 : 60)
                         .font(.system(size: hasSafeArea ? 18 : 16, weight: .medium, design: .rounded))
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
@@ -126,7 +126,7 @@ struct ContentView: View {
                         }
 //                        Spacer()
                     }
-                    .padding(.bottom, hasSafeArea ? 15 : 15)//deviceSE ? 5 : 10)
+                    .padding(.bottom, hasSafeArea ? 15 : deviceSE ? 5 : 10)
 
                     ZStack{
                         Rectangle()
@@ -171,42 +171,46 @@ struct ContentView: View {
 
                         }.padding(.horizontal, 15)
                     }
-                    .padding(.bottom, hasSafeArea ? 0 : 5) // -6
-//                    Spacer()
+                    .padding(.bottom, hasSafeArea ? 7 : 5)
+                    Spacer()
 
-                    if deviceXOrLater{
-                        VStack{
+                    ZStack {
+                        if deviceXOrLater{
+                            VStack{
+                                        Text("Total Amount")
+                                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                                            .padding(.bottom, 10)
+                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                
+                                        Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
+                                            .font(.system(size: 32, weight: .semibold, design: .rounded))
+                                            .foregroundColor(.darkBlueColor)
+                            }
+//                            .padding(.bottom, 6)
+                                Spacer()
+                        } else {
+                            HStack{
+
                                     Text("Total Amount")
-                                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                                        .padding(.bottom, 10)
-                                        .frame(minWidth: 0, maxWidth: .infinity)
-                            
+                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .frame(width: (UIScreen.main.bounds.width - 60) / 2)
+                                        .multilineTextAlignment(.leading)
+    //                                Spacer()
+
                                     Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                        .font(.system(size: 32, weight: .semibold, design: .rounded))
+                                        .font(.system(size: 22, weight: .semibold, design: .rounded))
+                                        .frame(width: (UIScreen.main.bounds.width - 60) / 2)
+                                        .multilineTextAlignment(.trailing)
                                         .foregroundColor(.darkBlueColor)
+                                        .lineLimit(1)
+                            }.padding(.horizontal, 15)
+//                            .padding(.bottom, 8)
+                            Spacer()
                         }
-                        .padding(.bottom, 6)
-//                            Spacer()
-                    } else {
-                        HStack{
-
-                                Text("Total Amount")
-                                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    .frame(width: (UIScreen.main.bounds.width - 60) / 2)
-                                    .multilineTextAlignment(.leading)
-//                                Spacer()
-
-                                Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                    .font(.system(size: 22, weight: .semibold, design: .rounded))
-                                    .frame(width: (UIScreen.main.bounds.width - 60) / 2)
-                                    .multilineTextAlignment(.trailing)
-                                    .foregroundColor(.darkBlueColor)
-                                    .lineLimit(1)
-                        }.padding(.horizontal, 15)
-                        .padding(.bottom, 8)
-//                        Spacer()
                     }
-                    
+                    .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: 90)
+                    .padding(.bottom, hasSafeArea ? 7 : 0) //x mate j work kare che
+
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
@@ -259,6 +263,7 @@ struct ContentView: View {
                             }
                         }
                     }
+                    .padding(.bottom, hasSafeArea ? 7 : 0)
                     Spacer()
 
                     VStack {
@@ -304,7 +309,9 @@ struct ContentView: View {
                                     .frame(width: (UIScreen.main.bounds.width - 50) / 2)
                                 }.padding()
                             }
-                           .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: hasSafeArea ? 100 : 80)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: hasSafeArea ? 90 : 80, maxHeight: hasSafeArea ? 110 : 100)
+
+//                           .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: hasSafeArea ? 100 : 80)
                             
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
@@ -315,18 +322,19 @@ struct ContentView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                             )
                     }
+                    .padding(.bottom, hasSafeArea ? 7 : 0) //x mate j work kare che
 
                     Spacer()
-                    if !hasSafeArea { Spacer() }
 
                     Button(action: clearEverythingTap, label: {
                         Text("Clear Everything")
                             .font(.system(size: 16, weight: .light, design: .rounded))
                             .foregroundColor(.darkBlueColor)
                     })
-                }.padding()
+                }.padding(.horizontal, 20)
+                .padding(.top, 5)
             }
-            .frame(alignment: .center)
+//            .frame(alignment: .center)
             .navigationBarTitle(Text("Quick Tip"), displayMode: hasSafeArea ? .large : .inline)
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
