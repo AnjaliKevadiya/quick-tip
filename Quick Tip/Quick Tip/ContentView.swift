@@ -13,14 +13,15 @@ struct ContentView: View {
     
     let deviceHeight: CGFloat = UIScreen.main.bounds.height
 
-    var deviceXOrLater : Bool {
+    var iPhone6To8AndplusSeries : Bool {
         if deviceHeight >= 736 {
             return true
         } else {
             return false
         }
     }
-    var deviceSE : Bool {
+    
+    var iPhoneSE : Bool {
         if deviceHeight <= 568 {
             return true
         } else {
@@ -88,11 +89,11 @@ struct ContentView: View {
                             self.isShowCloseButton.toggle()
                         })
                         .padding(20)
-                        .padding(.top, 3)
+                            .padding(.top, iPhoneSE ? 3 : 3)
                         .padding(.leading, 26)
                         .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
-                            .frame(height: hasSafeArea ? 68 : 60)
-                        .font(.system(size: hasSafeArea ? 18 : 16, weight: .medium, design: .rounded))
+                        .frame(height: iPhoneSE ? 56 : hasSafeArea ? 66 : 62)
+                        .font(.system(size: iPhoneSE ? 15 : 18, weight: .medium, design: .rounded))
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
                                 .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 6)
@@ -105,8 +106,8 @@ struct ContentView: View {
                         
                         HStack {
                             LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
-                                .mask(Text("$").font(.system(size: 26, weight: .semibold, design: .rounded))
-                            ).frame(width: 30, height: 30, alignment: .center)
+                                .mask(Text("$").font(.system(size: iPhoneSE ? 22 : 26, weight: .semibold, design: .rounded))
+                            ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
                                 .padding(.leading, 20)
                             Spacer()
                         }
@@ -120,20 +121,19 @@ struct ContentView: View {
                                         .mask(Image(systemName: "xmark")
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                    ).frame(width: 15, height: 15)
+                                    ).frame(width: iPhoneSE ? 13 : 15, height: iPhoneSE ? 13 : 15)
                                 }
                             }.padding(.horizontal, 20)
                         }
-//                        Spacer()
                     }
-                    .padding(.bottom, hasSafeArea ? 15 : deviceSE ? 5 : 10)
+                    .padding(.bottom, iPhoneSE ? 5 : hasSafeArea ? 15 : 10)
 
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
                             .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .frame(minWidth:0, maxWidth: .infinity, minHeight: hasSafeArea ? 100 : 90, maxHeight: hasSafeArea ? 120 : 110)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 100, maxHeight: 120)
                         .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
                         .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
 
@@ -143,18 +143,18 @@ struct ContentView: View {
                         VStack {
                             HStack {
                                 Text("Tip")
-                                    .font(.system(size: hasSafeArea ? 18 : 17, weight: .bold, design: .rounded))
+                                    .font(.system(size: iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                 
                                 Text(" - ")
-                                    .font(.system(size: hasSafeArea ? 17 : 16, weight: .medium, design: .rounded))
+                                    .font(.system(size: iPhoneSE ? 15 : 17, weight: .medium, design: .rounded))
 
                                 Text("\(tipViewModel.tipPercentage, specifier: "%.0f") %")
-                                    .font(.system(size: hasSafeArea ? 17 : 16, weight: .medium, design: .rounded))
+                                    .font(.system(size: iPhoneSE ? 15 : 17, weight: .medium, design: .rounded))
 
                                 Spacer()
 
                                 Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
-                                    .font(.system(size: hasSafeArea ? 18 : 17, weight: .bold, design: .rounded))
+                                    .font(.system(size: iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.darkBlueColor)
                             }
                             ZStack {
@@ -167,15 +167,31 @@ struct ContentView: View {
                                     .opacity(0.02)
                                 
                             }.frame(height: 30, alignment: .bottom)
-                            .padding(.top, hasSafeArea ? 15 : 10)
+                            .padding(.top, iPhoneSE ? 10 : 15)
 
                         }.padding(.horizontal, 15)
                     }
-                    .padding(.bottom, hasSafeArea ? 7 : 5)
+                    .padding(.bottom, iPhoneSE ? 5 : 7)
                     Spacer()
 
                     ZStack {
-                        if deviceXOrLater{
+                        if iPhoneSE{
+                            HStack{
+
+                                    Text("Total Amount")
+                                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                                        .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                        .multilineTextAlignment(.leading)
+
+                                    Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
+                                        .font(.system(size: 20, weight: .semibold, design: .rounded))
+                                        .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                        .multilineTextAlignment(.trailing)
+                                        .foregroundColor(.darkBlueColor)
+                                        .lineLimit(1)
+                            }.padding(.horizontal, 15)
+                            Spacer()
+                        } else {
                             VStack{
                                         Text("Total Amount")
                                             .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -186,37 +202,18 @@ struct ContentView: View {
                                             .font(.system(size: 32, weight: .semibold, design: .rounded))
                                             .foregroundColor(.darkBlueColor)
                             }
-//                            .padding(.bottom, 6)
                                 Spacer()
-                        } else {
-                            HStack{
-
-                                    Text("Total Amount")
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                        .frame(width: (UIScreen.main.bounds.width - 60) / 2)
-                                        .multilineTextAlignment(.leading)
-    //                                Spacer()
-
-                                    Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                        .font(.system(size: 22, weight: .semibold, design: .rounded))
-                                        .frame(width: (UIScreen.main.bounds.width - 60) / 2)
-                                        .multilineTextAlignment(.trailing)
-                                        .foregroundColor(.darkBlueColor)
-                                        .lineLimit(1)
-                            }.padding(.horizontal, 15)
-//                            .padding(.bottom, 8)
-                            Spacer()
                         }
                     }
-                    .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: 90)
-                    .padding(.bottom, hasSafeArea ? 7 : 0) //x mate j work kare che
+                    .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: iPhoneSE ? 40 : 90)
+                    .padding(.bottom, 7)
 
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
                             .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .frame(minWidth:0, maxWidth: 250, minHeight: hasSafeArea ? 100 : 90, maxHeight: hasSafeArea ? 120 : 110)
+                            .frame(minWidth:0, maxWidth: iPhoneSE ? 210 : 250, minHeight: 100, maxHeight: 120)
                             .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.5), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
                             .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
 
@@ -225,7 +222,7 @@ struct ContentView: View {
 
                         VStack {
                             Text("How many persons?")
-                                .font(.system(size: hasSafeArea ? 17 : 16, weight: .medium, design: .rounded))
+                                .font(.system(size: iPhoneSE ? 15 : 17, weight: .medium, design: .rounded))
                                 .padding(.bottom, 5)
 
                             HStack{
@@ -237,18 +234,17 @@ struct ContentView: View {
                                         .mask(Image(systemName: "minus.circle")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                        ).frame(width: 30, height: 30, alignment: .center)
+                                        ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
                                 })
                                 .disabled((Int(self.tipViewModel.person) != 1) ? false : true)
                                 .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
 
                                 TextField("1", text: $tipViewModel.person)
-                                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-
-                                    .frame(width: 50, height: 30, alignment: .center)
+                                    .font(.system(size: iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
+                                    .frame(width: iPhoneSE ? 36 : 50, height: 30, alignment: .center)
                                     .multilineTextAlignment(.center)
                                     .keyboardType(.decimalPad)
-                                
+                            
                                 Button(action: {
                                     print("plus tapped")
                                     self.tipViewModel.increasePerson()
@@ -258,18 +254,18 @@ struct ContentView: View {
                                         .mask(Image(systemName: "plus.circle")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                    ).frame(width: 30, height: 30, alignment: .center)
+                                    ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
                                 })
                             }
                         }
                     }
-                    .padding(.bottom, hasSafeArea ? 7 : 0)
+                    .padding(.bottom, iPhoneSE ? 0 : 7)
                     Spacer()
 
                     VStack {
                         
                             Text("Per Person")
-                                .font(.system(size: hasSafeArea ? 18 : 17, weight: .bold, design: .rounded))
+                                .font(.system(size: iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                 .padding(.top, 5)
 
                             VStack {
@@ -277,13 +273,13 @@ struct ContentView: View {
                                 HStack {
                                     VStack {
                                         Text("Tip")
-                                            .font(.system(size: hasSafeArea ? 18 : 16, weight: .semibold, design: .rounded
+                                            .font(.system(size: iPhoneSE ? 15 : 18, weight: .semibold, design: .rounded
                                                 ))
                                             .padding(.bottom, 10)
                                             .allowsTightening(true)
 
                                         Text(self.tipViewModel.tipPerPerson == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.tipPerPerson, specifier: "%.2f")")
-                                            .font(.system(size: hasSafeArea ? 24 : 20, weight: .semibold, design: .rounded))
+                                            .font(.system(size: iPhoneSE ? 18 : 24, weight: .semibold, design: .rounded))
                                             .foregroundColor(.darkBlueColor)
                                             .allowsTightening(true)
                                     }
@@ -297,21 +293,19 @@ struct ContentView: View {
 
                                     VStack {
                                         Text("Total")
-                                            .font(.system(size: hasSafeArea ? 18 : 16, weight: .semibold, design: .rounded
+                                            .font(.system(size: iPhoneSE ? 15 : 18, weight: .semibold, design: .rounded
                                                 ))
                                             .padding(.bottom, 10)
                                             .allowsTightening(true)
                                         Text(self.tipViewModel.totalPerPerson == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalPerPerson, specifier: "%.2f")")
-                                            .font(.system(size: hasSafeArea ? 24 : 20, weight: .semibold, design: .rounded))
+                                            .font(.system(size: iPhoneSE ? 18    : 24, weight: .semibold, design: .rounded))
                                             .foregroundColor(.darkBlueColor)
                                             .allowsTightening(true)
                                     }
                                     .frame(width: (UIScreen.main.bounds.width - 50) / 2)
                                 }.padding()
                             }
-                            .frame(minWidth:0, maxWidth: .infinity, minHeight: hasSafeArea ? 90 : 80, maxHeight: hasSafeArea ? 110 : 100)
-
-//                           .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: hasSafeArea ? 100 : 80)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: iPhoneSE ? 80 : 90, maxHeight: iPhoneSE ? 100 : 110)
                             
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
@@ -322,23 +316,23 @@ struct ContentView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                             )
                     }
-                    .padding(.bottom, hasSafeArea ? 7 : 0) //x mate j work kare che
+                    .padding(.bottom, iPhoneSE ? 0 : 7)
 
                     Spacer()
 
                     Button(action: clearEverythingTap, label: {
                         Text("Clear Everything")
-                            .font(.system(size: 16, weight: .light, design: .rounded))
+                            .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
                             .foregroundColor(.darkBlueColor)
                     })
                 }.padding(.horizontal, 20)
-                .padding(.top, 5)
+                    .padding(.vertical, iPhoneSE ? 20 : hasSafeArea ? 5 : 15)
             }
 //            .frame(alignment: .center)
             .navigationBarTitle(Text("Quick Tip"), displayMode: hasSafeArea ? .large : .inline)
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
-                self.isNavigationBarHidden = self.deviceSE ? true : false
+                self.isNavigationBarHidden = self.iPhoneSE ? true : false
             }
 
         }
