@@ -28,7 +28,7 @@ class TipViewModel: ObservableObject {
     @Published var tipPercentage: Double = 0
     @Published var person: String = "1" {
         didSet {
-            if person.count > 3{
+            if person.count > 2{
                 person = oldValue
             }
         }
