@@ -20,7 +20,10 @@ struct StoreKitHelper {
         let lastVersionPromotedForReview = UserDefaults.standard.string(forKey: "lastVersion")
         let numberOfTimesLaunched: Int = UserDefaults.standard.integer(forKey: StoreKitHelper.numberOfTimesLaunchedKey)
         
-        if numberOfTimesLaunched > 2 && currentVersion != lastVersionPromotedForReview {
+        if numberOfTimesLaunched > 5 && currentVersion != lastVersionPromotedForReview {
+            
+//            let urlString = "https://apps.apple.com/us/app/quick-tip-calculator/id1513029460?ls=1"
+//            UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
             SKStoreReviewController.requestReview()
             UserDefaults.standard.set(currentVersion, forKey: "lastVersion")
         }

@@ -324,3 +324,34 @@ fileprivate extension NumberFormatter {
         self.numberStyle = numberStyle
     }
 }
+
+
+//@State private var value = 0.0
+
+//struct TextFieldView: UIViewRepresentable {
+//    @Binding var text: String
+//    
+//    public func makeCoordinator() -> CurrencyTextField.Coordinator {
+//        Coordinator(value: $value)
+//    }
+//
+//    func makeUIView(context: Context) -> UITextField {
+//        return UITextField()
+//    }
+//
+//    func updateUIView(_ uiView: UITextField, context: Context) {
+//        if let amountString = uiView.text?.currencyInputFormatting() {
+//            text = amountString
+//        }
+////        uiView.text = text
+//    }
+//    
+//    public class Coordinator: NSObject, UITextFieldDelegate {
+//        var value: Binding<Double>
+//        
+//        init(value: Binding<Double>) {
+//            self.value = value
+//        }
+//        
+//    }
+//}

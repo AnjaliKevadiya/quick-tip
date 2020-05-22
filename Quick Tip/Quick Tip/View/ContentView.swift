@@ -26,11 +26,12 @@ struct ContentView: View {
         return true
     }
 
-    @State private var value = 0.0
     @State private var refresh = false
     @State private var isShowCloseButton = false
     @State var isNavigationBarHidden: Bool = true
     @State var keyboardHeight: CGFloat = 0
+    @State private var isSharePresented: Bool = false
+    @State private var isSettingPresented: Bool = false
     
     @ObservedObject var tipViewModel = TipViewModel()
     @Environment(\.colorScheme) var colorScheme
@@ -56,17 +57,15 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView {
-                
+
             ZStack{
                 if colorScheme == .dark {
                     Color.darkEnd
                         .edgesIgnoringSafeArea(.all)
-//                        .modifier(DismissKeyboard())
 
                 } else {
                     Color.offWhite
                         .edgesIgnoringSafeArea(.all)
-//                        .modifier(DismissKeyboard())
                 }
 //                .gesture(DragGesture().onChanged{_ in
 //                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -74,30 +73,14 @@ struct ContentView: View {
 
                 VStack {
                     ZStack{
-                        
-//                        CurrencyTextField("Enter bill amount", value: self.$value)
+
                         TextField("Enter bill amount" + (refresh ? "" : " "), text: $tipViewModel.billAmount, onEditingChanged: { _ in
                             self.isShowCloseButton.toggle()
                         })
-                        .padding(20)
-                        .padding(.top, iPhoneSE ? 3 : 3)
-                        .padding(.leading, 26)
-                        .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
-                        .frame(height: iPhoneSE ? 56 : hasSafeArea ? 66 : 62)
-                        .font(.system(size: iPhoneSE ? 15 : 18, weight: .medium, design: .rounded))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 6)
-                                .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightGray2, radius: 3, x: 6, y: 6)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white, radius: 2, x: -4, y: -4)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                        )
-                        .cornerRadius(15)
-                        .keyboardType(.decimalPad)
+                        .modifier(TextFieldModifer())
 
                         HStack {
-                            LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
                                 .mask(Text("$").font(.system(size: iPhoneSE ? 22 : 26, weight: .semibold, design: .rounded))
                             ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
                                 .padding(.leading, 20)
@@ -108,8 +91,7 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 Button(action: closeButtonTap) {
-
-                                    LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
+                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
                                         .mask(Image(systemName: "xmark")
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
@@ -133,7 +115,7 @@ struct ContentView: View {
                             HStack {
                                 Text("Tip")
                                     .font(.system(size: iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
-                                
+
                                 Text(" - ")
                                     .font(.system(size: iPhoneSE ? 15 : 17, weight: .medium, design: .rounded))
 
@@ -150,12 +132,12 @@ struct ContentView: View {
                                 LinearGradient(
                                     gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]),
                                     startPoint: .leading,
-                                    endPoint: .trailing
-                                ).mask(Slider(value: $tipViewModel.tipPercentage, in: 0...50, step: 1))
+                                    endPoint: .trailing)
+                                    .mask(Slider(value: $tipViewModel.tipPercentage, in: 0...50, step: 1))
                                 Slider(value: $tipViewModel.tipPercentage, in: 0...50, step: 1)
                                     .opacity(0.02)
                                 .contentShape(Rectangle())
-                                
+
                             }.frame(height: 30, alignment: .bottom)
                             .padding(.top, iPhoneSE ? 10 : 15)
 
@@ -168,29 +150,29 @@ struct ContentView: View {
                         if iPhoneSE{
                             HStack{
 
-                                    Text("Total Amount")
-                                        .font(.system(size: 17, weight: .bold, design: .rounded))
-                                        .frame(width: (UIScreen.main.bounds.width - 40) / 2)
-                                        .multilineTextAlignment(.leading)
+                                Text("Total Amount")
+                                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                    .multilineTextAlignment(.leading)
 
-                                    Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                        .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                        .frame(width: (UIScreen.main.bounds.width - 40) / 2)
-                                        .multilineTextAlignment(.trailing)
-                                        .foregroundColor(.darkBlueColor)
-                                        .lineLimit(1)
+                                Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
+                                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                    .multilineTextAlignment(.trailing)
+                                    .foregroundColor(.darkBlueColor)
+                                    .lineLimit(1)
                             }.padding(.horizontal, 15)
                             Spacer()
                         } else {
                             VStack{
-                                        Text("Total Amount")
-                                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                                            .padding(.bottom, 10)
-                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                
-                                        Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                            .font(.system(size: 32, weight: .semibold, design: .rounded))
-                                            .foregroundColor(.darkBlueColor)
+                                Text("Total Amount")
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .padding(.bottom, 10)
+                                    .frame(minWidth: 0, maxWidth: .infinity)
+
+                                Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
+                                    .font(.system(size: 32, weight: .semibold, design: .rounded))
+                                    .foregroundColor(.darkBlueColor)
                             }
                                 Spacer()
                         }
@@ -218,34 +200,35 @@ struct ContentView: View {
                                     print("minus tapped")
                                     self.tipViewModel.removePerson()
                                 }, label: {
-                                    LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
-                                        .mask(Image(systemName: "minus.circle")
+                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                        .mask(Image(systemName: "minus")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                        ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
+                                        ).frame(width: iPhoneSE ? 18 : 20, height: iPhoneSE ? 18 : 20, alignment: .center)
                                 })
                                 .disabled((Int(self.tipViewModel.person) != 1) ? false : true)
                                 .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
-                                
-                                
+                                .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+
                                 TextField("1", text: $tipViewModel.person)
                                     .font(.system(size: iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
                                     .frame(width: iPhoneSE ? 36 : 50, height: 30, alignment: .center)
                                     .multilineTextAlignment(.center)
                                     .keyboardType(.decimalPad)
                                     .disabled(true)
-                                
+
                                 Button(action: {
                                     print("plus tapped")
                                     self.tipViewModel.increasePerson()
 
                                 }, label: {
-                                    LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
-                                        .mask(Image(systemName: "plus.circle")
+                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                        .mask(Image(systemName: "plus")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                    ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
+                                    ).frame(width: iPhoneSE ? 18 : 20, height: iPhoneSE ? 18 : 20, alignment: .center)
                                 })
+                                .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                             }
                         }
                     }
@@ -253,7 +236,7 @@ struct ContentView: View {
                     Spacer()
 
                     VStack {
-                        
+
                             Text("Per Person")
                                 .font(.system(size: iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                 .padding(.top, 5)
@@ -274,7 +257,7 @@ struct ContentView: View {
                                             .allowsTightening(true)
                                     }
                                     .frame(width: (UIScreen.main.bounds.width - 50) / 2)
-                                    
+
                                     Rectangle()
                                         .frame(width: 1, height: 60)
                                         .foregroundColor(colorScheme == .dark ? Color.darkEnd.opacity(0.2) : Color.lightGray1)
@@ -296,7 +279,7 @@ struct ContentView: View {
                                 }.padding()
                             }
                             .frame(minWidth:0, maxWidth: .infinity, minHeight: iPhoneSE ? 80 : 90, maxHeight: iPhoneSE ? 100 : 110)
-                            
+
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 2)
@@ -318,48 +301,61 @@ struct ContentView: View {
 
 //                    HStack {
 //                        Button(action: {
-//                            print("minus tapped")
-//                            self.tipViewModel.removePerson()
+//                            self.isSharePresented = true
 //
 //                        }, label: {
-//                            LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
+//                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
 //                                .mask(Image(systemName: "tray.and.arrow.up.fill")
 //                                    .resizable()
 //                                    .aspectRatio(contentMode: .fit)
-//                            ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
+//                            ).frame(width: iPhoneSE ? 26 : 25, height: iPhoneSE ? 26 : 25, alignment: .center)
+//                            })
+//                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+//                        .sheet(isPresented: $isSharePresented, onDismiss: {
+//                            print("Dismiss")
+//                            self.isSharePresented = false
+//                        }, content: {
+//                            ActivityViewController(activityItems: [URL(string: "https://www.apple.com")!])
 //                        })
+//
 //                        Spacer()
+//
 //                        Button(action: clearEverythingTap, label: {
 //                            Text("Clear Everything")
 //                                .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
 //                                .foregroundColor(.darkBlueColor)
 //                        })
 //                        Spacer()
-//                        Button(action: {
-//                            print("plus tapped")
-//                            self.tipViewModel.increasePerson()
 //
+//                        Button(action: {
+//                            self.isSettingPresented = true
 //                        }, label: {
-//                            LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
-//                                .mask(Image(systemName: "plus.circle")
+//                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+//                                .mask(Image("settings")
 //                                    .resizable()
 //                                    .aspectRatio(contentMode: .fit)
-//                            ).frame(width: iPhoneSE ? 26 : 30, height: iPhoneSE ? 26 : 30, alignment: .center)
+//                            ).frame(width: iPhoneSE ? 26 : 25, height: iPhoneSE ? 26 : 25, alignment: .center)
 //                        })
+//                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+//                            .sheet(isPresented: $isSettingPresented, onDismiss: {
+//                                print("Dismiss")
+//                                self.isSettingPresented = false
+//                            }, content: {
+//                                SettingsView()
+//                            })
 //                    }
                 }.padding(.horizontal, 20)
                 .padding(.vertical, iPhoneSE ? 20 : hasSafeArea ? 5 : 15)
             }
-                .modifier(DismissKeyboard())
+                .modifier(DismissKeyboardModifier())
 //            .frame(alignment: .center)
             .navigationBarTitle(Text("Quick Tip"), displayMode: hasSafeArea ? .large : .inline)
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
                 self.isNavigationBarHidden = self.iPhoneSE ? true : false
-                
+
                 StoreKitHelper.displayStoreKit()
             }
-//        .navigationBarItems(trailing: Image(systemName: "circle"))
         }
     }
     
@@ -384,171 +380,3 @@ struct ContentView_Previews: PreviewProvider {
 }
 #endif
 
-struct lightButtonStyle: ButtonStyle {
-    
-    var iPhoneSE : Bool {
-        if UIScreen.main.bounds.height <= 568 {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-        .padding(iPhoneSE ? 7 : 10)
-        .background(
-            Group {
-                if configuration.isPressed {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.offWhite)
-                    .contentShape(Rectangle())
-                    .overlay(
-                        
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.lightGray2, lineWidth: 4)
-                            .blur(radius: 1)
-                            .offset(x: 2, y: 2)
-                            .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(Color.black, Color.clear)))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.white, lineWidth: 4)
-                            .blur(radius: 1)
-                            .offset(x: -2, y: -2)
-                            .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(Color.clear, Color.black)))
-                    )
-                } else {
-                    RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.offWhite)
-                        .contentShape(Rectangle())
-                    .shadow(color: Color.white.opacity(0.8), radius: 1, x: -2, y: -2)
-                    .shadow(color: Color.lightPurple.opacity(0.6), radius: 1, x: 2, y: 2)
-                }
-            }
-        )
-    }
-}
-
-struct darkButtonStyle: ButtonStyle {
-
-    var iPhoneSE : Bool {
-        if UIScreen.main.bounds.height <= 568 {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-        .padding(iPhoneSE ? 7 : 10)
-        .background(
-            Group {
-                if configuration.isPressed {
-                    RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.darkEnd)
-                    .overlay(
-                        
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.darkestGray, lineWidth: 4)
-                            .blur(radius: 1)
-                            .offset(x: 2, y: 2)
-                            .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(Color.darkestGray, Color.clear)))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.darkStart, lineWidth: 4)
-                            .blur(radius: 1)
-                            .offset(x: -2, y: -2)
-                            .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(Color.clear, Color.darkestGray)))
-                    )
-                } else {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.darkEnd)
-                        .shadow(color: Color.darkStart, radius: 1, x: -1, y: -1)
-                        .shadow(color: Color.darkestGray, radius: 1, x: 1, y: 1)
-                }
-            }
-        )
-    }
-}
-
-extension LinearGradient {
-    init(_ colors: Color...) {
-        self.init(gradient: Gradient(colors: colors), startPoint: .topLeading, endPoint: .bottomTrailing)
-    }
-}
-
-extension Color {
-    static let offWhite = Color(red: 240 / 255, green: 240 / 255, blue: 243 / 255)
-    static let lightGray1 = Color(red: 236/255, green: 234/255, blue: 235/255)
-    static let lightGray2 = Color(red: 192/255, green: 189/255, blue: 191/255)
-    static let lightPurple = Color(red: 174 / 255, green: 174 / 255, blue: 192 / 255)
-
-    static let darkBlueColor = Color(red: 88 / 255, green: 186 / 255, blue: 186 / 255)
-    static let lightBlueColor = Color(red: 145 / 255, green: 236 / 255, blue: 207 / 255)
-    static let blueGradient = LinearGradient(gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]), startPoint: .top, endPoint: .bottom)
-
-    static let darkStart = Color(red: 61 / 255, green: 62 / 255, blue: 68 / 255)
-    static let darkEnd = Color(red: 48 / 255, green: 49 / 255, blue: 53 / 255)
-    static let darkestGray = Color(red: 25 / 255, green: 25 / 255, blue: 30 / 255)
-}
-
-//struct TextFieldView: UIViewRepresentable {
-//    @Binding var text: String
-//    
-//    public func makeCoordinator() -> CurrencyTextField.Coordinator {
-//        Coordinator(value: $value)
-//    }
-//
-//    func makeUIView(context: Context) -> UITextField {
-//        return UITextField()
-//    }
-//
-//    func updateUIView(_ uiView: UITextField, context: Context) {
-//        if let amountString = uiView.text?.currencyInputFormatting() {
-//            text = amountString
-//        }
-////        uiView.text = text
-//    }
-//    
-//    public class Coordinator: NSObject, UITextFieldDelegate {
-//        var value: Binding<Double>
-//        
-//        init(value: Binding<Double>) {
-//            self.value = value
-//        }
-//        
-//    }
-//}
-//
-//extension String {
-//
-//    // formatting text for currency textField
-//    func currencyInputFormatting() -> String {
-//
-//        var number: NSNumber!
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .currencyAccounting
-//        formatter.currencySymbol = "$"
-//        formatter.maximumFractionDigits = 2
-//        formatter.minimumFractionDigits = 2
-//
-//        var amountWithPrefix = self
-//
-//        // remove from String: "$", ".", ","
-//        let regex = try! NSRegularExpression(pattern: "[^0-9]", options: .caseInsensitive)
-//        amountWithPrefix = regex.stringByReplacingMatches(in: amountWithPrefix, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count), withTemplate: "")
-//
-//        let double = (amountWithPrefix as NSString).doubleValue
-//        number = NSNumber(value: (double / 100))
-//
-//        // if first number is 0 or all numbers were deleted
-//        guard number != 0 as NSNumber else {
-//            return ""
-//        }
-//
-//        return formatter.string(from: number)!
-//    }
-//}

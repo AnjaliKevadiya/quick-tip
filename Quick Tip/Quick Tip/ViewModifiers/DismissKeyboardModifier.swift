@@ -1,5 +1,5 @@
 //
-//  DismissKeyboard.swift
+//  DismissKeyboardModifier.swift
 //  Quick Tip
 //
 //  Created by Anjali Kevadiya on 4/30/20.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct DismissKeyboard: ViewModifier {
+struct DismissKeyboardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content.onTapGesture {
             let keyWindow = UIApplication.shared.connectedScenes
