@@ -29,11 +29,7 @@ struct TextFieldModifer: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-        .padding(20)
-            .padding(.top, iPhoneSE ? 3 : 3)
-        .padding(.leading, 26)
         .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
-        .frame(height: iPhoneSE ? 56 : hasSafeArea ? 66 : 62)
         .font(.system(size: iPhoneSE ? 15 : 18, weight: .medium, design: .rounded))
         .overlay(
             RoundedRectangle(cornerRadius: 15)

@@ -11,6 +11,15 @@ import Combine
 
 struct ContentView: View {
     
+    @State private var billText: String!
+    var iPhone8PlusOrLater : Bool {
+        if UIScreen.main.bounds.height >= 736 {
+            return true
+        } else {
+            return false
+        }
+    }
+
     var iPhoneSE : Bool {
         if UIScreen.main.bounds.height <= 568 {
             return true
@@ -26,23 +35,25 @@ struct ContentView: View {
         return true
     }
 
-    @State private var refresh = false
+//    @State private var rect: CGRect = .zero
+//    @State private var uiImage: UIImage? = nil
+
+//    let items: [Any] = ["Swift is awesome!  Check out this website about it!", URL(string: "https://apps.apple.com/us/app/quick-tip-calculator/id1513029460?ls=1")!]
+
+    @State private var refreshTextField = false
     @State private var isShowCloseButton = false
     @State var isNavigationBarHidden: Bool = true
     @State var keyboardHeight: CGFloat = 0
     @State private var isSharePresented: Bool = false
+    @State private var isShareAlert: Bool = false
+
     @State private var isSettingPresented: Bool = false
-    
+
     @ObservedObject var tipViewModel = TipViewModel()
     @Environment(\.colorScheme) var colorScheme
 
     init() {
-        if colorScheme == .dark {
-            UITextField.appearance().tintColor = .gray
-        } else {
-            UITextField.appearance().tintColor = .gray
-        }
-        
+            
         let fontSize: CGFloat = 34
         let systemFont = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         let font: UIFont
@@ -52,7 +63,8 @@ struct ContentView: View {
             font = systemFont
         }
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : font]
-}
+        UITextField.appearance().tintColor = .gray
+    }
     
     var body: some View {
         
@@ -74,9 +86,13 @@ struct ContentView: View {
                 VStack {
                     ZStack{
 
-                        TextField("Enter bill amount" + (refresh ? "" : " "), text: $tipViewModel.billAmount, onEditingChanged: { _ in
+                        TextField("Enter bill amount" + (refreshTextField ? "" : " "), text: $tipViewModel.billAmount, onEditingChanged: { _ in
                             self.isShowCloseButton.toggle()
                         })
+                        .padding(20)
+                        .padding(.top, iPhoneSE ? 3 : 3)
+                        .padding(.leading, 26)
+                        .frame(height: iPhoneSE ? 54 : hasSafeArea ? 64 : 60)
                         .modifier(TextFieldModifer())
 
                         HStack {
@@ -101,13 +117,13 @@ struct ContentView: View {
                         }
                     }
                     .padding(.bottom, iPhoneSE ? 5 : hasSafeArea ? 15 : 10)
-
+                    
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
                             .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 100, maxHeight: 120)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: iPhoneSE ? 100 : 106, maxHeight: 126)
                         .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.8), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
                         .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
 
@@ -136,10 +152,9 @@ struct ContentView: View {
                                     .mask(Slider(value: $tipViewModel.tipPercentage, in: 0...50, step: 1))
                                 Slider(value: $tipViewModel.tipPercentage, in: 0...50, step: 1)
                                     .opacity(0.02)
-                                .contentShape(Rectangle())
 
                             }.frame(height: 30, alignment: .bottom)
-                            .padding(.top, iPhoneSE ? 10 : 15)
+                                .padding(.top, iPhoneSE ? 10 : 15)
 
                         }.padding(.horizontal, 15)
                     }
@@ -147,23 +162,7 @@ struct ContentView: View {
                     Spacer()
 
                     ZStack {
-                        if iPhoneSE{
-                            HStack{
-
-                                Text("Total Amount")
-                                    .font(.system(size: 17, weight: .bold, design: .rounded))
-                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
-                                    .multilineTextAlignment(.leading)
-
-                                Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
-                                    .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
-                                    .multilineTextAlignment(.trailing)
-                                    .foregroundColor(.darkBlueColor)
-                                    .lineLimit(1)
-                            }.padding(.horizontal, 15)
-                            Spacer()
-                        } else {
+                        if iPhone8PlusOrLater {
                             VStack{
                                 Text("Total Amount")
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -174,18 +173,34 @@ struct ContentView: View {
                                     .font(.system(size: 32, weight: .semibold, design: .rounded))
                                     .foregroundColor(.darkBlueColor)
                             }
-                                Spacer()
+                            Spacer()
+                        } else {
+                            HStack{
+
+                                Text("Total Amount")
+                                    .font(.system(size: iPhoneSE ? 17 : 19, weight: .bold, design: .rounded))
+                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                    .multilineTextAlignment(.leading)
+
+                                Text(self.tipViewModel.totalAmount == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalAmount, specifier: "%.2f")")
+                                    .font(.system(size: iPhoneSE ? 20 : 24, weight: .semibold, design: .rounded))
+                                    .frame(width: (UIScreen.main.bounds.width - 40) / 2)
+                                    .multilineTextAlignment(.trailing)
+                                    .foregroundColor(.darkBlueColor)
+                                    .lineLimit(1)
+                            }.padding(.horizontal, 15)
+                            Spacer()
                         }
                     }
                     .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: iPhoneSE ? 40 : 90)
-                    .padding(.bottom, 7)
+                    .padding(.bottom, hasSafeArea ? 10 : 7)
 
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
                             .opacity(colorScheme == .dark ? 1 : 0.5)
                             .cornerRadius(25)
-                            .frame(minWidth:0, maxWidth: iPhoneSE ? 210 : 250, minHeight: 100, maxHeight: 120)
+                            .frame(minWidth:0, maxWidth: iPhoneSE ? 210 : 250, minHeight: iPhoneSE ? 100 : 106, maxHeight: 126)
                             .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.8), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
                             .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
 
@@ -210,13 +225,22 @@ struct ContentView: View {
                                 .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
                                 .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
 
+//                                Picker(selection: $tipViewModel.tipPercentage, label: Text("")) {
+//                                    Text("1").tag(1)
+//                                    /*@START_MENU_TOKEN@*/Text("2").tag(2)/*@END_MENU_TOKEN@*/
+//                                    Text("3").tag(3)
+//                                    Text("4").tag(4)
+//                                    Text("5").tag(5)
+//
+//                                }.pickerStyle(WheelPickerStyle())
+
                                 TextField("1", text: $tipViewModel.person)
                                     .font(.system(size: iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
                                     .frame(width: iPhoneSE ? 36 : 50, height: 30, alignment: .center)
                                     .multilineTextAlignment(.center)
                                     .keyboardType(.decimalPad)
-                                    .disabled(true)
-
+//                                    .disabled(true)
+ 
                                 Button(action: {
                                     print("plus tapped")
                                     self.tipViewModel.increasePerson()
@@ -252,7 +276,7 @@ struct ContentView: View {
                                             .allowsTightening(true)
 
                                         Text(self.tipViewModel.tipPerPerson == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.tipPerPerson, specifier: "%.2f")")
-                                            .font(.system(size: iPhoneSE ? 18 : 24, weight: .semibold, design: .rounded))
+                                            .font(.system(size: iPhone8PlusOrLater ? 24 : iPhoneSE ? 18 : 22, weight: .semibold, design: .rounded))
                                             .foregroundColor(.darkBlueColor)
                                             .allowsTightening(true)
                                     }
@@ -271,14 +295,14 @@ struct ContentView: View {
                                             .padding(.bottom, 10)
                                             .allowsTightening(true)
                                         Text(self.tipViewModel.totalPerPerson == 0.0 ? "$ 0.00" : "$ \(self.tipViewModel.totalPerPerson, specifier: "%.2f")")
-                                            .font(.system(size: iPhoneSE ? 18    : 24, weight: .semibold, design: .rounded))
+                                            .font(.system(size: iPhone8PlusOrLater ? 24 : iPhoneSE ? 18 : 22, weight: .semibold, design: .rounded))
                                             .foregroundColor(.darkBlueColor)
                                             .allowsTightening(true)
                                     }
                                     .frame(width: (UIScreen.main.bounds.width - 50) / 2)
                                 }.padding()
                             }
-                            .frame(minWidth:0, maxWidth: .infinity, minHeight: iPhoneSE ? 80 : 90, maxHeight: iPhoneSE ? 100 : 110)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: iPhoneSE ? 80 : 90, maxHeight: iPhoneSE ? 100 : 120)
 
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
@@ -293,62 +317,60 @@ struct ContentView: View {
 
                     Spacer()
 
-                    Button(action: clearEverythingTap, label: {
-                        Text("Clear Everything")
-                            .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
-                            .foregroundColor(.darkBlueColor)
-                    })
+//                    Button(action: clearEverythingTap, label: {
+//                        Text("Clear Everything")
+//                            .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
+//                            .foregroundColor(.darkBlueColor)
+//                    })
 
-//                    HStack {
-//                        Button(action: {
-//                            self.isSharePresented = true
-//
-//                        }, label: {
-//                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-//                                .mask(Image(systemName: "tray.and.arrow.up.fill")
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                            ).frame(width: iPhoneSE ? 26 : 25, height: iPhoneSE ? 26 : 25, alignment: .center)
-//                            })
-//                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
-//                        .sheet(isPresented: $isSharePresented, onDismiss: {
-//                            print("Dismiss")
-//                            self.isSharePresented = false
-//                        }, content: {
-//                            ActivityViewController(activityItems: [URL(string: "https://www.apple.com")!])
-//                        })
-//
-//                        Spacer()
-//
-//                        Button(action: clearEverythingTap, label: {
-//                            Text("Clear Everything")
-//                                .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
-//                                .foregroundColor(.darkBlueColor)
-//                        })
-//                        Spacer()
-//
-//                        Button(action: {
-//                            self.isSettingPresented = true
-//                        }, label: {
-//                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-//                                .mask(Image("settings")
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fit)
-//                            ).frame(width: iPhoneSE ? 26 : 25, height: iPhoneSE ? 26 : 25, alignment: .center)
-//                        })
-//                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
-//                            .sheet(isPresented: $isSettingPresented, onDismiss: {
-//                                print("Dismiss")
-//                                self.isSettingPresented = false
-//                            }, content: {
-//                                SettingsView()
-//                            })
-//                    }
-                }.padding(.horizontal, 20)
-                .padding(.vertical, iPhoneSE ? 20 : hasSafeArea ? 5 : 15)
+                    HStack {
+                        Button(action: shareBill, label: {
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(Image(systemName: "tray.and.arrow.up.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: iPhoneSE ? 20 : 25, height: iPhoneSE ? 20 : 25, alignment: .center)
+                            })
+                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                        .sheet(isPresented: $isSharePresented, onDismiss: {
+                            print("Dismiss")
+                            self.isSharePresented = false
+                        }, content: {
+                            ActivityViewController(billText: self.billText)
+                        })
+                        .alert(isPresented: $isShareAlert) { () -> Alert in
+                            Alert(title: Text("Can't share cheque"), message: Text("Please enter bill amount and select tip percentage first!!"), dismissButton: .default(Text("OK").foregroundColor(.darkBlueColor)))
+                        }
+                        Spacer()
+
+                        Button(action: clearEverythingTap, label: {
+                            Text("Clear Everything")
+                                .font(.system(size: iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
+                                .foregroundColor(.darkBlueColor)
+                        })
+                        Spacer()
+
+                        Button(action: {
+                            self.isSettingPresented = true
+                        }, label: {
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(Image("settings")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: iPhone8PlusOrLater ? 25 : iPhoneSE ? 20 : 22, height: iPhone8PlusOrLater ? 25 : iPhoneSE ? 20 : 22, alignment: .center)
+                        })
+                            .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                            .sheet(isPresented: $isSettingPresented, onDismiss: {
+                                print("Dismiss")
+                                self.isSettingPresented = false
+                            }, content: {
+                                SettingsView()
+                            })
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, iPhoneSE ? 20 : hasSafeArea ? 0 : 15)//5
             }
-                .modifier(DismissKeyboardModifier())
-//            .frame(alignment: .center)
             .navigationBarTitle(Text("Quick Tip"), displayMode: hasSafeArea ? .large : .inline)
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
@@ -357,6 +379,7 @@ struct ContentView: View {
                 StoreKitHelper.displayStoreKit()
             }
         }
+        .modifier(DismissKeyboardModifier())
     }
     
     func closeButtonTap() {
@@ -365,9 +388,57 @@ struct ContentView: View {
 
     func clearEverythingTap() {
         tipViewModel.billAmount = ""
-        self.refresh.toggle()
+        self.refreshTextField.toggle()
         tipViewModel.tipPercentage = 0
         tipViewModel.person = "1"
+    }
+    
+    func shareBill() {
+        
+//        if self.tipViewModel.billAmount == "" {
+//            self.isShareAlert = true
+//            print("You can't share check details without entering bill amount!")
+//        } else {
+            self.isSharePresented = true
+//        }
+
+        self.billText = """
+        Quick Tip - Calculator
+        Date and Time
+        
+        Bill Amount : $ \(self.tipViewModel.billAmount)
+        Tip : $ \(self.tipViewModel.tipAmount) (\(self.tipViewModel.tipPercentage) %)
+        Split for \(self.tipViewModel.person) : $ \(self.tipViewModel.totalPerPerson)
+        
+        TOTAL To PAY - $ \(self.tipViewModel.totalAmount)
+        """
+
+//        if self.tipViewModel.billAmount != "" && self.tipViewModel.person == "1" {
+//
+//            self.billText = """
+//            Your check details my friend!
+//            BILL : $ \(self.tipViewModel.billAmount)
+//            TIP : $ \(self.tipViewModel.tipAmount) (\(self.tipViewModel.tipPercentage) %)
+//            GRAND TOTAL : $ \(self.tipViewModel.totalAmount)
+//
+//            By Quick Tip - Calculator
+//            """
+//
+//        } else if self.tipViewModel.billAmount != "" {
+//
+//            self.billText = """
+//            Your check details my friend!
+//
+//            BILL : $ \(self.tipViewModel.billAmount)
+//            TIP : $ \(self.tipViewModel.tipAmount) (\(self.tipViewModel.tipPercentage) %)
+//            GRAND TOTAL : $ \(self.tipViewModel.totalAmount)
+//            SPLIT BETWEEN : \(self.tipViewModel.person) PERSONS
+//            TIP PER PERSON : $ \(self.tipViewModel.tipPerPerson)
+//            TOTAL PER PERSON : $ \(self.tipViewModel.totalPerPerson)
+//
+//            By Quick Tip - Calculator
+//            """
+//        }
     }
 }
 
@@ -379,4 +450,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 #endif
-
