@@ -11,9 +11,7 @@ import LinkPresentation
 
 struct ActivityViewController: UIViewControllerRepresentable {
     
-    let billText: String
-
-//    var activityItems: [Any]
+    let textToShare: String
     var applicationActivities: [UIActivity]? = nil
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityViewController>) -> UIActivityViewController {
@@ -23,7 +21,7 @@ struct ActivityViewController: UIViewControllerRepresentable {
         let photo = UIImage(named: "AppIcon")
         let itemSource = ShareActivityItemSource(shareText: text, shareImage: photo!)
         
-        let activityItems: [Any] = [billText, itemSource]
+        let activityItems: [Any] = [textToShare, itemSource]
 
         let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
         return controller

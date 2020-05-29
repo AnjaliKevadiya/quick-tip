@@ -10,28 +10,17 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    var iPhoneSE : Bool {
-        if UIScreen.main.bounds.height <= 568 {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    var hasSafeArea: Bool {
-        guard #available(iOS 11.0, *), let topPadding = UIApplication.shared.windows.first?.safeAreaInsets.top, topPadding > 24 else {
-            return false
-        }
-        return true
-    }
-
-    @Environment(\.colorScheme) var colorScheme
-    @State var isNavigationBarHidden: Bool = true
     @ObservedObject var tipViewModel = TipViewModel()
+    @Environment(\.colorScheme) var colorScheme
     
-    @State private var remmemberTip: Bool = false
+    @State var isNavigationBarHidden: Bool = true
+    @State private var rememberTip: Bool = false
     @State private var roundResultsUp: Bool = false
     @State private var shareApp: Bool = false
+    
+//    init() {
+//        UISwitch.appearance().onTintColor = .orange
+//    }
     
     var body: some View {
         
@@ -47,106 +36,120 @@ struct SettingsView: View {
                         .edgesIgnoringSafeArea(.all)
                 }
                 VStack {
-                    Divider()
+                    
+                    if Variable.hasSafeArea {
+                        Divider()
+                            .padding(.bottom, 3)
+                    }
                         
-                    ZStack{
-                        RoundedRectangleView()
-//                        Rectangle()
-//                            .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
-//                            .opacity(colorScheme == .dark ? 1 : 0.5)
-//                            .cornerRadius(10)
-//                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: 50)
-//                            .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.8), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
-//                            .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
-
-                        Toggle(isOn: $remmemberTip) {
-                            Text("Remmember last tip")
-                                .font(.system(size: iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
-
-                            }
-                        .padding(20)
-                        .frame(height: 60)
-                    }
-                    
-                    ZStack{
-                        RoundedRectangleView()
-
-                        HStack {
-                            Text("Round Results Up")                                .font(.system(size: iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
-
-//                            Image(systemName: "text.badge.plus")
-                            Spacer()
-                            
-                            Toggle(isOn: $roundResultsUp) {
-                                Text("")
-                            }
-//                            ZStack {
-//                                LinearGradient(
-//                                    gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]),
-//                                    startPoint: .leading,
-//                                    endPoint: .trailing)
-//                                    .mask(Toggle(isOn: $roundResultsUp) {
-//                                        Text("")
-//                                    })
+//                    ZStack{
+//                        RoundedRectangleView()
 //
-//                                Toggle(isOn: $roundResultsUp) {
-//                                    Text("")
-//                                }.opacity(0.02)
-//                            }.frame(height: 50)
-                            
-                        }
-                        .padding(20)
-                        .frame(height: 60)
-                    }
+//                        Toggle(isOn: $rememberTip) {
+//                            Text("Remember last tip")
+//                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+//
+//                        }.onTapGesture {
+//                            self.rememberTip.toggle()
+//                            UserDefaults.standard.set(self.rememberTip, forKey: "RememberLastTip")
+////                            UserDefaults.standard.bool(forKey: "RememberLastTip")
+//                        }
+//                        .padding(16)
+//                        .frame(height: Variable.iPhoneSE ? 50 : 60)
+//                    }
+                    
+//                    ZStack{
+//                        RoundedRectangleView()
+//
+//                        HStack {
+//                            Text("Round Results Up")                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+//                                .multilineTextAlignment(.leading)
+//
+//                                .frame(width: Variable.iPhoneSE ? 126 : 142)
+////                            Image(systemName: "text.badge.plus")
+//                            Spacer()
+//
+//                            Toggle(isOn: $roundResultsUp) {
+//                                Text("")
+//                            }
+////                            ZStack {
+////                                LinearGradient(
+////                                    gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]),
+////                                    startPoint: .leading,
+////                                    endPoint: .trailing)
+////                                    .mask(Toggle(isOn: $roundResultsUp) {
+////                                        Text("")
+////                                    })
+////
+////                                Toggle(isOn: $roundResultsUp) {
+////                                    Text("")
+////                                }.opacity(0.02)
+////                            }.frame(height: 50)
+//
+//                        }
+//                        .padding(16)
+//                        .frame(height: Variable.iPhoneSE ? 50 : 60)
+//                    }
 
                     ZStack{
                         RoundedRectangleView()
 
                         HStack {
-//                            Image(systemName: "star")
+                            
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(
+                                    Image(systemName: "star.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                            .padding(.trailing, 10)
+
                             Text("Rate Us")
-                                .font(.system(size: iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
 
                             Spacer()
                         }
-                            .padding(20)
-                            .onTapGesture {
-                                let urlString = "https://apps.apple.com/us/app/quick-tip-calculator/id1513029460?action=write-review"
-                                UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
-                            }
+                            .padding(Variable.iPhoneSE ? 15 : 20)
                     }
-                    
+                    .onTapGesture {
+                        let urlString = "https://apps.apple.com/us/app/quick-tip-calculator/id1513029460?action=write-review"
+                        UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
+                    }
+
                     ZStack{
                         RoundedRectangleView()
 
                         HStack() {
-//                            Image(systemName: "arrowshape.turn.up.right")
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(
+                                    Image(systemName: "arrowshape.turn.up.right.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                            .padding(.trailing, 10)
+
                             Text("Share")
-                            .font(.system(size: iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+                            .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
 
                             Spacer()
                         }
-                            .padding(20)
-                            .onTapGesture {
-                                self.shareApp = true
-                            }
-                            .sheet(isPresented: $shareApp, onDismiss: {
-                                print("Dismiss")
-                                self.shareApp = false
-                            }, content: {
-                                ActivityViewController(billText: "https://apps.apple.com/us/app/quick-tip-calculator/id1513029460?ls=1")
-                            })
+                            .padding(Variable.iPhoneSE ? 15 : 20)
                     }
+                    .onTapGesture {
+                        self.shareApp = true
+                    }
+                    .sheet(isPresented: $shareApp, onDismiss: {
+                        print("Dismiss")
+                        self.shareApp = false
+                    }, content: {
+                        ActivityViewController(textToShare: "https://apple.co/36GmePy")
+                    })
 
                     Spacer()
                 }.padding(.horizontal, 20)
-                .padding(.vertical, iPhoneSE ? 20 : hasSafeArea ? 0 : 15)//5
+                    .padding(.vertical, Variable.hasSafeArea ? 0 : 15)
             }
-            .navigationBarTitle(Text("Settings"), displayMode: hasSafeArea ? .large : .inline)
-//            .navigationBarHidden(self.isNavigationBarHidden)
-//            .onAppear {
-//                self.isNavigationBarHidden = self.iPhoneSE ? true : false
-//            }
+            .navigationBarTitle(Text("Settings"), displayMode: Variable.hasSafeArea ? .large : .inline)
         }
     }
 }

@@ -7,6 +7,20 @@
 //
 
 import SwiftUI
+ 
+//extension UIView {
+//    
+//    static func setGradientBackground() {//(colorOne: UIColor, colorTwo: UIColor) {
+//        
+//        let gradientLayer = CAGradientLayer()
+//        gradientLayer.frame = .zero
+//        gradientLayer.colors = [UIColor.red.cgColor, UIColor.blue.cgColor]
+//        gradientLayer.locations = [0.0, 1.0]
+//        gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
+//        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
+//        self.layer.insertSublayer(gradientLayer, at: 0)
+//    }
+//}
 
 extension LinearGradient {
     init(_ colors: Color...) {

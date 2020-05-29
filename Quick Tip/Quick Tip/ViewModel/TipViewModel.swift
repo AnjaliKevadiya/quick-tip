@@ -15,8 +15,6 @@ import Combine
 //must need to add didChange event if you use ObservableObject
 class TipViewModel: ObservableObject {
     
-    var tipChoices = ["10", "15", "20"]
-    
     @Published var billAmount: String = "" {
         didSet {
             if billAmount.count > 6 && oldValue.count <= 6 {
@@ -24,7 +22,8 @@ class TipViewModel: ObservableObject {
             }
         }
     }
-    
+//    var isRememberLastTip = UserDefaults.standard.bool(forKey: "RememberLastTip")
+
     @Published var tipPercentage: Double = 0
     @Published var person: String = "1" {
         didSet {
@@ -33,13 +32,14 @@ class TipViewModel: ObservableObject {
             }
         }
     }
-    
+
     private var subCancellable1: AnyCancellable!
     private var subCancellable2 : AnyCancellable!
     private var validCharSetForAmount = CharacterSet(charactersIn: "1234567890.")
     private var validCharSetForPerson = CharacterSet(charactersIn: "1234567890")
 
     init() {
+        
         subCancellable1 = $billAmount.sink { val in
             //check if the new string contains any invalid characters
             if val.rangeOfCharacter(from: self.validCharSetForAmount.inverted) != nil {
@@ -71,6 +71,7 @@ class TipViewModel: ObservableObject {
     }
 
     var tipAmount: Double {
+        
         guard let billAmount = Double(billAmount) else { return 0 }
         let tipAmount = billAmount * tipPercentage / 100
         return tipAmount
