@@ -17,7 +17,7 @@ struct SettingsView: View {
     @State private var rememberTip: Bool = false
     @State private var roundResultsUp: Bool = false
     @State private var shareApp: Bool = false
-    
+
 //    init() {
 //        UISwitch.appearance().onTintColor = .orange
 //    }
@@ -150,6 +150,17 @@ struct SettingsView: View {
                     .padding(.vertical, Variable.hasSafeArea ? 0 : 15)
             }
             .navigationBarTitle(Text("Settings"), displayMode: Variable.hasSafeArea ? .large : .inline)
+//            .navigationBarItems(trailing: Button(action: {
+//                print("pressed")
+//            }, label: {
+//                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+//                        .mask(Image(systemName: "xmark")
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                    ).frame(width: Variable.iPhoneSE ? 18 : 15, height: Variable.iPhoneSE ? 18 : 15, alignment: .center)
+//                }).buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+//                .padding(.top)
+//            )
         }
     }
 }

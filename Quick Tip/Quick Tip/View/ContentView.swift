@@ -18,7 +18,6 @@ struct ContentView: View {
     @State private var isShowCloseButton = false
     @State var isNavigationBarHidden: Bool = true
     @State private var isSharePresented: Bool = false
-    @State private var isShareAlert: Bool = false
     @State private var textToShare: String!
     @State private var isSettingPresented: Bool = false
 
@@ -87,7 +86,7 @@ struct ContentView: View {
                         }
                     }
                     .padding(.bottom, Variable.iPhoneSE ? 5 : Variable.hasSafeArea ? 15 : 10)
-                    
+
                     ZStack{
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
@@ -180,49 +179,45 @@ struct ContentView: View {
                                 .padding(.bottom, 5)
                                 .frame(minWidth: 0, maxWidth: .infinity)
 
-                            HStack{
-                                Button(action: {
-                                    print("minus tapped")
-                                    self.tipViewModel.removePerson()
-                                }, label: {
-                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-                                        .mask(Image(systemName: "minus")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                        ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
-                                })
-                                .disabled((Int(self.tipViewModel.person) != 1) ? false : true)
-                                .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
-                                .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                            ZStack {
+                                NumberOfPersonsView(value: $tipViewModel.person)
+                                
+                                HStack {
+                                        
+                                        Button(action: {
+                                            self.tipViewModel.removePerson()
+                                        }, label: {
+                                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                                .mask(Image(systemName: "minus")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                                        })
+                                        .disabled((Int(self.tipViewModel.person) != 1) ? false : true)
+                                        .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
+                                        .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                                            .padding(.trailing, Variable.iPhoneSE ? 24 : 30)
+                                    
+        //                                TextField("1", text: $tipViewModel.person)
+        //                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
+        //                                    .frame(width: Variable.iPhoneSE ? 36 : 50, height: 30, alignment: .center)
+        //                                    .multilineTextAlignment(.center)
+        //                                    .keyboardType(.decimalPad)
+        ////                                    .disabled(true)
 
-//                                Picker(selection: $tipViewModel.tipPercentage, label: Text("")) {
-//                                    Text("1").tag(1)
-//                                    /*@START_MENU_TOKEN@*/Text("2").tag(2)/*@END_MENU_TOKEN@*/
-//                                    Text("3").tag(3)
-//                                    Text("4").tag(4)
-//                                    Text("5").tag(5)
-//
-//                                }.pickerStyle(WheelPickerStyle())
+                                        Button(action: {
+                                            self.tipViewModel.increasePerson()
 
-                                TextField("1", text: $tipViewModel.person)
-                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
-                                    .frame(width: Variable.iPhoneSE ? 36 : 50, height: 30, alignment: .center)
-                                    .multilineTextAlignment(.center)
-                                    .keyboardType(.decimalPad)
-//                                    .disabled(true)
- 
-                                Button(action: {
-                                    print("plus tapped")
-                                    self.tipViewModel.increasePerson()
-
-                                }, label: {
-                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-                                        .mask(Image(systemName: "plus")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                    ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
-                                })
-                                .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                                        }, label: {
+                                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                                .mask(Image(systemName: "plus")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                            ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                                        })
+                                        .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                                        .padding(.leading, Variable.iPhoneSE ? 24 : 30)
+                                    }
                             }
                         }
                     }
@@ -302,9 +297,6 @@ struct ContentView: View {
                         }, content: {
                             ActivityViewController(textToShare: self.textToShare)
                         })
-                        .alert(isPresented: $isShareAlert) { () -> Alert in
-                            Alert(title: Text("Can't share cheque"), message: Text("Please enter bill amount and select tip percentage first!!"), dismissButton: .default(Text("OK").foregroundColor(.darkBlueColor)))
-                        }
                         Spacer()
 
                         Button(action: clearEverythingTap, label: {
@@ -354,54 +346,25 @@ struct ContentView: View {
         tipViewModel.billAmount = ""
         self.refreshTextField.toggle()
         tipViewModel.tipPercentage = 0
-        tipViewModel.person = "1"
+        tipViewModel.person = 1//"1"
     }
     
     func shareBill() {
         
-//        if self.tipViewModel.billAmount == "" {
-//            self.isShareAlert = true
-//            print("You can't share check details without entering bill amount!")
-//        } else {
-            self.isSharePresented = true
-//        }
+        self.isSharePresented = true
         
+        let tipAmount = String(format: "%.2f", self.tipViewModel.tipAmount)
+        let totalPerPerson = String(format: "%.2f", self.tipViewModel.totalPerPerson)
+
         self.textToShare = """
         Quick Tip - Calculator
         
-        Bill Amount : $ \(Double(self.tipViewModel.billAmount) ?? 0.00)
-        Tip (\(self.tipViewModel.tipPercentage) %) : $ \(self.tipViewModel.tipAmount)
-        Split for \(self.tipViewModel.person) : $ \(self.tipViewModel.totalPerPerson)
+        Bill Amount - $ \(Double(self.tipViewModel.billAmount) ?? 0.00)
+        Tip (\(self.tipViewModel.tipPercentage) %) - $ \(tipAmount)
+        Split for \(self.tipViewModel.person) - $ \(totalPerPerson)
         
         TOTAL TO PAY - $ \(self.tipViewModel.totalAmount)
         """
-
-//        if self.tipViewModel.billAmount != "" && self.tipViewModel.person == "1" {
-//
-//            self.billText = """
-//            Your check details my friend!
-//            BILL : $ \(self.tipViewModel.billAmount)
-//            TIP : $ \(self.tipViewModel.tipAmount) (\(self.tipViewModel.tipPercentage) %)
-//            GRAND TOTAL : $ \(self.tipViewModel.totalAmount)
-//
-//            By Quick Tip - Calculator
-//            """
-//
-//        } else if self.tipViewModel.billAmount != "" {
-//
-//            self.billText = """
-//            Your check details my friend!
-//
-//            BILL : $ \(self.tipViewModel.billAmount)
-//            TIP : $ \(self.tipViewModel.tipAmount) (\(self.tipViewModel.tipPercentage) %)
-//            GRAND TOTAL : $ \(self.tipViewModel.totalAmount)
-//            SPLIT BETWEEN : \(self.tipViewModel.person) PERSONS
-//            TIP PER PERSON : $ \(self.tipViewModel.tipPerPerson)
-//            TOTAL PER PERSON : $ \(self.tipViewModel.totalPerPerson)
-//
-//            By Quick Tip - Calculator
-//            """
-//        }
     }
 }
 

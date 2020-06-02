@@ -10,9 +10,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-//why we create class instade of struct is because we need to use ObservableObject
-//ObservableObject will only work with Classes not Structs
-//must need to add didChange event if you use ObservableObject
 class TipViewModel: ObservableObject {
     
     @Published var billAmount: String = "" {
@@ -25,13 +22,15 @@ class TipViewModel: ObservableObject {
 //    var isRememberLastTip = UserDefaults.standard.bool(forKey: "RememberLastTip")
 
     @Published var tipPercentage: Double = 0
-    @Published var person: String = "1" {
-        didSet {
-            if person.count > 2{
-                person = oldValue
-            }
-        }
-    }
+    @Published var person: Int = 1
+
+//    @Published var person: String = "1" {
+//        didSet {
+//            if person.count > 2{
+//                person = oldValue
+//            }
+//        }
+//    }
 
     private var subCancellable1: AnyCancellable!
     private var subCancellable2 : AnyCancellable!
@@ -52,22 +51,17 @@ class TipViewModel: ObservableObject {
             }
         }
         
-        subCancellable2 = $person.sink { val in
-            //check if the new string contains any invalid characters
-            if val.rangeOfCharacter(from: self.validCharSetForPerson.inverted) != nil {
-                //clean the string (do this on the main thread to avoid overlapping with the current ContentView update cycle)
-                DispatchQueue.main.async {
-                    self.person = String(self.person.unicodeScalars.filter {
-                        self.validCharSetForPerson.contains($0)
-                    })
-                }
-            }
-        }
-    }
-
-    deinit {
-        subCancellable1.cancel()
-        subCancellable2.cancel()
+//        subCancellable2 = $person.sink { val in
+//            //check if the new string contains any invalid characters
+//            if val.rangeOfCharacter(from: self.validCharSetForPerson.inverted) != nil {
+//                //clean the string (do this on the main thread to avoid overlapping with the current ContentView update cycle)
+//                DispatchQueue.main.async {
+//                    self.person = String(self.person.unicodeScalars.filter {
+//                        self.validCharSetForPerson.contains($0)
+//                    })
+//                }
+//            }
+//        }
     }
 
     var tipAmount: Double {
@@ -84,24 +78,39 @@ class TipViewModel: ObservableObject {
     }
     
     var tipPerPerson: Double {
-        guard let  person = Double(person) else { return 0 }
-        return tipAmount / person
+//        guard let  person = Double(person) else { return 0 }
+        return tipAmount / Double(person)
     }
     
     var totalPerPerson: Double {
-        guard let  person = Double(person) else { return 0 }
-        return totalAmount / person
+//        guard let  person = Double(person) else { return 0 }
+        return totalAmount / Double(person)
     }
     
     func increasePerson() {
-        let personCount = Int(person) ?? 1
-        person = "\(personCount + 1)"
+        person = person + 1
     }
     
     func removePerson() {
-        let personCount = Int(person) ?? 1
-        if personCount != 1 {
-            person = "\(personCount - 1)"
+        if person != 1 {
+            person = person - 1
         }
+    }
+
+//    func increasePerson() {
+//        let personCount = Int(person) ?? 1
+//        person = "\(personCount + 1)"
+//    }
+//
+//    func removePerson() {
+//        let personCount = Int(person) ?? 1
+//        if personCount != 1 {
+//            person = "\(personCount - 1)"
+//        }
+//    }
+    
+    deinit {
+        subCancellable1.cancel()
+        subCancellable2.cancel()
     }
 }

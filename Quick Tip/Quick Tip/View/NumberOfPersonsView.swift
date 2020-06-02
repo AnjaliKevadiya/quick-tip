@@ -9,14 +9,34 @@
 import SwiftUI
 
 struct NumberOfPersonsView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    
+        var toDisplay:String {
+            get {
+                return "Sel \(value)"
+            }
+        }
 
-struct NumberOfPersonsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NumberOfPersonsView()
-            .frame(width: 300, height: 200, alignment: .center)
-    }
+        @Binding var value: Int
+        
+        var body: some View {
+//            ZStack {
+//                Color.black.opacity(0.3).edgesIgnoringSafeArea(.all)
+
+//            HStack{
+//                        Text(toDisplay)
+
+                        Picker(selection: $value, label: Text("")) {
+
+                                ForEach(0 ..< 100) {
+                                    Text("\($0)").tag($0)
+                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
+                                }
+                            }.pickerStyle(WheelPickerStyle())
+                            .labelsHidden()
+                            .frame(width: Variable.iPhoneSE ? 36 : 50, height: 30)
+                            .cornerRadius(15)
+//                            .background(Color.red)
+                        }
+//            }
+//        }
 }
