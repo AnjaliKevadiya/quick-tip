@@ -82,3 +82,29 @@ extension String {
 //    }
 //}
 
+extension UserDefaults {
+
+    struct Keys {
+        static let isRoundResultsUp = "isRoundResultsUp"
+        static let isRememberLastTip = "isRememberLastTip"
+    }
+    
+    static var isRoundResultsUp: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Keys.isRoundResultsUp)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.isRoundResultsUp)
+        }
+    }
+    
+    static var isRememberLastTip: Bool {
+        get{
+            return UserDefaults.standard.bool(forKey: Keys.isRememberLastTip)
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: Keys.isRememberLastTip)
+        }
+    }
+}
+

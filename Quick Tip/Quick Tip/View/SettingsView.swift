@@ -14,8 +14,6 @@ struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State var isNavigationBarHidden: Bool = true
-    @State private var rememberTip: Bool = false
-    @State private var roundResultsUp: Bool = false
     @State private var shareApp: Bool = false
 
 //    init() {
@@ -42,63 +40,67 @@ struct SettingsView: View {
                             .padding(.bottom, 3)
                     }
                         
-//                    ZStack{
-//                        RoundedRectangleView()
-//
-//                        Toggle(isOn: $rememberTip) {
-//                            Text("Remember last tip")
-//                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
-//
-//                        }.onTapGesture {
-//                            self.rememberTip.toggle()
-//                            UserDefaults.standard.set(self.rememberTip, forKey: "RememberLastTip")
-////                            UserDefaults.standard.bool(forKey: "RememberLastTip")
-//                        }
-//                        .padding(16)
-//                        .frame(height: Variable.iPhoneSE ? 50 : 60)
-//                    }
+                    ZStack{
+                        RoundedRectangleView(cornerRadius: 15)
+                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: Variable.iPhoneSE ? 40 : 50)
+
+                        HStack {
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(
+                                    Image(systemName: "text.badge.checkmark")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                            .padding(.trailing, 10)
+
+                            Toggle(isOn: $tipViewModel.isRememberLastTip) {
+                                Text("Remember Last Tip")
+                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+                            }
+                            .frame(height: Variable.iPhoneSE ? 50 : 70)
+                        }
+                        .padding(Variable.iPhoneSE ? 15 : 20)
+                        .frame(height: Variable.iPhoneSE ? 50 : 60)
+                    }
                     
-//                    ZStack{
-//                        RoundedRectangleView()
-//
-//                        HStack {
-//                            Text("Round Results Up")                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
-//                                .multilineTextAlignment(.leading)
-//
-//                                .frame(width: Variable.iPhoneSE ? 126 : 142)
-////                            Image(systemName: "text.badge.plus")
-//                            Spacer()
-//
-//                            Toggle(isOn: $roundResultsUp) {
-//                                Text("")
-//                            }
-////                            ZStack {
-////                                LinearGradient(
-////                                    gradient: Gradient(colors: [.darkBlueColor, .lightBlueColor]),
-////                                    startPoint: .leading,
-////                                    endPoint: .trailing)
-////                                    .mask(Toggle(isOn: $roundResultsUp) {
-////                                        Text("")
-////                                    })
-////
-////                                Toggle(isOn: $roundResultsUp) {
-////                                    Text("")
-////                                }.opacity(0.02)
-////                            }.frame(height: 50)
-//
-//                        }
-//                        .padding(16)
-//                        .frame(height: Variable.iPhoneSE ? 50 : 60)
-//                    }
+                    ZStack{
+                        RoundedRectangleView(cornerRadius: 15)
+                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: Variable.iPhoneSE ? 40 : 50)
+
+                        HStack {
+                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                .mask(
+                                    Image(systemName: "pencil.and.outline")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
+                            .padding(.trailing, 10)
+
+                            Toggle(isOn: $tipViewModel.isRoundResultsUp) {
+                                Text("Round Results Up")                                .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
+                                    .multilineTextAlignment(.leading)
+                                    .frame(width: Variable.iPhoneSE ? 126 : 142)
+                            }
+                            .onAppear(perform: {
+                                print("setting value \(self.$tipViewModel.isRoundResultsUp)")
+                            })
+                            .frame(height: Variable.iPhoneSE ? 50 : 60)
+                            
+//                            .toggleStyle(ColoredToggleStyle(onColor: .darkBlueColor, offColor: .lightGray1, thumbColor: .white))
+                        }
+                        .padding(Variable.iPhoneSE ? 15 : 20)
+                        .frame(height: Variable.iPhoneSE ? 50 : 60)
+                    }
 
                     ZStack{
-                        RoundedRectangleView()
+                        RoundedRectangleView(cornerRadius: 15)
+                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: Variable.iPhoneSE ? 40 : 50)
 
                         HStack {
                             
                             LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
                                 .mask(
-                                    Image(systemName: "star.fill")
+                                    Image(systemName: "star")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                             ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
@@ -117,12 +119,13 @@ struct SettingsView: View {
                     }
 
                     ZStack{
-                        RoundedRectangleView()
+                        RoundedRectangleView(cornerRadius: 15)
+                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 0, maxHeight: Variable.iPhoneSE ? 40 : 50)
 
                         HStack() {
                             LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
                                 .mask(
-                                    Image(systemName: "arrowshape.turn.up.right.fill")
+                                    Image(systemName: "arrowshape.turn.up.right")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                             ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
@@ -165,10 +168,31 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
+//struct SettingsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SettingsView()
+//    }
+//}
+
+
+struct ColoredToggleStyle: ToggleStyle {
+    var onColor = Color(UIColor.green)
+    var offColor = Color(UIColor.systemGray5)
+    var thumbColor = Color.white
+
+    func makeBody(configuration: Self.Configuration) -> some View {
+            Button(action: { configuration.isOn.toggle() } )
+            {
+                RoundedRectangle(cornerRadius: 16, style: .circular)
+                    .fill(configuration.isOn ? onColor : offColor)
+                    .frame(width: 50, height: 29)
+                    .overlay(
+                        Circle()
+                            .fill(thumbColor)
+                            .shadow(radius: 1, x: 0, y: 1)
+                            .padding(1.5)
+                            .offset(x: configuration.isOn ? 10 : -10))
+                    .animation(Animation.easeInOut(duration: 0.1))
+            }
     }
 }
-
-

@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TextFieldModifer: ViewModifier {
     
-//    @Environment(\.colorScheme) var colorScheme
     var scheme: ColorScheme
     func body(content: Content) -> some View {
         content

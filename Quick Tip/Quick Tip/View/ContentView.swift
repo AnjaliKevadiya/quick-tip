@@ -88,13 +88,8 @@ struct ContentView: View {
                     .padding(.bottom, Variable.iPhoneSE ? 5 : Variable.hasSafeArea ? 15 : 10)
 
                     ZStack{
-                        Rectangle()
-                            .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
-                            .opacity(colorScheme == .dark ? 1 : 0.5)
-                            .cornerRadius(25)
+                        RoundedRectangleView(cornerRadius: 25)
                             .frame(minWidth:0, maxWidth: .infinity, minHeight: Variable.iPhoneSE ? 100 : 106, maxHeight: 126)
-                        .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.8), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
-                        .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
 
                         VStack {
                             HStack {
@@ -109,9 +104,15 @@ struct ContentView: View {
 
                                 Spacer()
 
-                                Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
-                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
-                                    .foregroundColor(.darkBlueColor)
+                                if tipViewModel.isRoundResultsUp {
+                                    Text("$ \(round(tipViewModel.tipAmount), specifier: "%.2f")")
+                                        .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.darkBlueColor)
+                                } else {
+                                    Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
+                                        .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.darkBlueColor)
+                                }
                             }
                             ZStack {
                                 LinearGradient(
@@ -165,13 +166,8 @@ struct ContentView: View {
                     .padding(.bottom, Variable.hasSafeArea ? 10 : 7)
 
                     ZStack{
-                        Rectangle()
-                            .fill(colorScheme == .dark ? Color.darkEnd : Color.white)
-                            .opacity(colorScheme == .dark ? 1 : 0.5)
-                            .cornerRadius(25)
-                            .frame(minWidth:0, maxWidth: Variable.iPhoneSE ? 210 : 250, minHeight: Variable.iPhoneSE ? 100 : 106, maxHeight: 126)
-                            .shadow(color: colorScheme == .dark ? Color.darkStart : Color.white.opacity(0.8), radius: colorScheme == .dark ? 10 : 5, x: -5, y: -5)
-                            .shadow(color: colorScheme == .dark ? Color.darkestGray : Color.lightPurple.opacity(0.6), radius: 5, x: 5, y: 5)
+                        RoundedRectangleView(cornerRadius: 25)
+                        .frame(minWidth:0, maxWidth: Variable.iPhoneSE ? 210 : 250, minHeight: Variable.iPhoneSE ? 100 : 106, maxHeight: 126)
 
                         VStack {
                             Text("How many persons?")
@@ -318,6 +314,8 @@ struct ContentView: View {
                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                         .sheet(isPresented: $isSettingPresented, onDismiss: {
                             print("Dismiss")
+                            print("setting value \(self.$tipViewModel.isRoundResultsUp)")
+
                             self.isSettingPresented = false
                         }, content: {
                             SettingsView()

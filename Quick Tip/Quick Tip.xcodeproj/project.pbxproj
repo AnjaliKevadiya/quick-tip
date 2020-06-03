@@ -79,8 +79,8 @@
 			isa = PBXGroup;
 			children = (
 				250728BE2475BF2100396FEC /* StoreKitHelper.swift */,
-				258B1E3E24772E9C004BE308 /* Extensions.swift */,
 				25A9083424819D0200AE30D6 /* Variables.swift */,
+				258B1E3E24772E9C004BE308 /* Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
