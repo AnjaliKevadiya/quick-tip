@@ -15,7 +15,7 @@ struct NumberOfPersonsView: View {
         var body: some View {
             Picker(selection: $value, label: Text("")) {
 
-                    ForEach(0 ..< 100) {
+                ForEach((1 ..< 100), id: \.self) {
                         Text("\($0)").tag($0)
                         .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
                     }

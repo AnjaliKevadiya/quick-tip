@@ -20,26 +20,23 @@ class TipViewModel: ObservableObject {
         }
     }
     
-    @Published var tipPercentage: Double = 0
+    @Published var tipPercentage: Double = 0//!UserDefaults.isRememberLastTip ? 0 : UserDefaults.lastTip {
+//        willSet {
+//            UserDefaults.lastTip = newValue
+//        }
+//    }
+    
     @Published var person: Int = 1
     
-    @Published var isRememberLastTip: Bool = UserDefaults.isRememberLastTip {
-        willSet {
-            UserDefaults.isRememberLastTip = newValue
-        }
-    }
-    
-    @Published var isRoundResultsUp: Bool = UserDefaults.isRoundResultsUp {
-        willSet {
-            UserDefaults.isRoundResultsUp = newValue
-        }
-    }
-
-//    @Published var person: String = "1" {
-//        didSet {
-//            if person.count > 2{
-//                person = oldValue
-//            }
+//    @Published var isRememberLastTip: Bool = UserDefaults.isRememberLastTip {
+//        willSet {
+//            UserDefaults.isRememberLastTip = newValue
+//        }
+//    }
+//    
+//    @Published var isRoundResultsUp: Bool = UserDefaults.isRoundResultsUp {
+//        willSet {
+//            UserDefaults.isRoundResultsUp = newValue
 //        }
 //    }
 
@@ -73,12 +70,10 @@ class TipViewModel: ObservableObject {
     }
     
     var tipPerPerson: Double {
-//        guard let  person = Double(person) else { return 0 }
         return tipAmount / Double(person)
     }
     
     var totalPerPerson: Double {
-//        guard let  person = Double(person) else { return 0 }
         return totalAmount / Double(person)
     }
     
@@ -92,18 +87,6 @@ class TipViewModel: ObservableObject {
         }
     }
 
-//    func increasePerson() {
-//        let personCount = Int(person) ?? 1
-//        person = "\(personCount + 1)"
-//    }
-//
-//    func removePerson() {
-//        let personCount = Int(person) ?? 1
-//        if personCount != 1 {
-//            person = "\(personCount - 1)"
-//        }
-//    }
-    
     deinit {
         subCancellable1.cancel()
     }

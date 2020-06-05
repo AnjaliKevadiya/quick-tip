@@ -61,7 +61,7 @@ struct ContentView: View {
                         .padding(20)
                         .padding(.top, Variable.iPhoneSE ? 3 : 3)
                         .padding(.leading, 26)
-                        .frame(height: Variable.iPhoneSE ? 54 : Variable.hasSafeArea ? 64 : 60)
+                        .frame(height: Variable.iPhoneSE ? 54 : Variable.hasSafeArea ? 62 : 60)
                         .modifier(TextFieldModifer(scheme: colorScheme))
 
                         HStack {
@@ -104,15 +104,15 @@ struct ContentView: View {
 
                                 Spacer()
 
-                                if tipViewModel.isRoundResultsUp {
-                                    Text("$ \(round(tipViewModel.tipAmount), specifier: "%.2f")")
-                                        .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
-                                        .foregroundColor(.darkBlueColor)
-                                } else {
+//                                if tipViewModel.isRoundResultsUp {
+//                                    Text("$ \(round(tipViewModel.tipAmount), specifier: "%.2f")")
+//                                        .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
+//                                        .foregroundColor(.darkBlueColor)
+//                                } else {
                                     Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
                                         .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.darkBlueColor)
-                                }
+//                                }
                             }
                             ZStack {
                                 LinearGradient(
@@ -194,13 +194,6 @@ struct ContentView: View {
                                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                                             .padding(.trailing, Variable.iPhoneSE ? 24 : 30)
                                     
-        //                                TextField("1", text: $tipViewModel.person)
-        //                                    .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
-        //                                    .frame(width: Variable.iPhoneSE ? 36 : 50, height: 30, alignment: .center)
-        //                                    .multilineTextAlignment(.center)
-        //                                    .keyboardType(.decimalPad)
-        ////                                    .disabled(true)
-
                                         Button(action: {
                                             self.tipViewModel.increasePerson()
 
@@ -213,6 +206,8 @@ struct ContentView: View {
                                         })
                                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                                         .padding(.leading, Variable.iPhoneSE ? 24 : 30)
+                                        .disabled((Int(self.tipViewModel.person) != 99) ? false : true)
+                                        .opacity((Int(self.tipViewModel.person) != 99) ? 1 : 0.5)
                                     }
                             }
                         }
@@ -300,6 +295,7 @@ struct ContentView: View {
                                 .font(.system(size: Variable.iPhoneSE ? 14 : 16, weight: .light, design: .rounded))
                                 .foregroundColor(.darkBlueColor)
                         })
+
                         Spacer()
 
                         Button(action: {
@@ -314,8 +310,6 @@ struct ContentView: View {
                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                         .sheet(isPresented: $isSettingPresented, onDismiss: {
                             print("Dismiss")
-                            print("setting value \(self.$tipViewModel.isRoundResultsUp)")
-
                             self.isSettingPresented = false
                         }, content: {
                             SettingsView()
@@ -332,8 +326,11 @@ struct ContentView: View {
 
                 StoreKitHelper.displayStoreKit()
             }
+            .modifier(DismissKeyboardModifier())
         }
-        .modifier(DismissKeyboardModifier())
+//        .onReceive([self.$tipViewModel.isRememberLastTip].publisher.first()) { (value) in
+//            print("content receiver tip \(value)")
+//        }
     }
     
     func closeButtonTap() {
@@ -343,26 +340,40 @@ struct ContentView: View {
     func clearEverythingTap() {
         tipViewModel.billAmount = ""
         self.refreshTextField.toggle()
-        tipViewModel.tipPercentage = 0
         tipViewModel.person = 1//"1"
+//        if tipViewModel.isRememberLastTip {
+//            tipViewModel.tipPercentage = UserDefaults.standard.double(forKey: UserDefaults.Keys.lastTip)
+//        } else {
+            tipViewModel.tipPercentage = 0
+//        }
     }
     
     func shareBill() {
         
         self.isSharePresented = true
         
+        let billAmount = String(format: "%.2f", Double(self.tipViewModel.billAmount) ?? 0.00)
         let tipAmount = String(format: "%.2f", self.tipViewModel.tipAmount)
         let totalPerPerson = String(format: "%.2f", self.tipViewModel.totalPerPerson)
+        let totalAmount = String(format: "%.2f", self.tipViewModel.totalAmount)
 
         self.textToShare = """
         Quick Tip - Calculator
+        \(todayDate())
         
-        Bill Amount - $ \(Double(self.tipViewModel.billAmount) ?? 0.00)
+        Bill Amount - $ \(billAmount)
         Tip (\(self.tipViewModel.tipPercentage) %) - $ \(tipAmount)
         Split for \(self.tipViewModel.person) - $ \(totalPerPerson)
         
-        TOTAL TO PAY - $ \(self.tipViewModel.totalAmount)
+        TOTAL TO PAY - $ \(totalAmount)
         """
+    }
+    
+    func todayDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: Date())
     }
 }
 

@@ -8,20 +8,6 @@
 
 import SwiftUI
  
-//extension UIView {
-//    
-//    static func setGradientBackground() {//(colorOne: UIColor, colorTwo: UIColor) {
-//        
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = .zero
-//        gradientLayer.colors = [UIColor.red.cgColor, UIColor.blue.cgColor]
-//        gradientLayer.locations = [0.0, 1.0]
-//        gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
-//        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
-//        self.layer.insertSublayer(gradientLayer, at: 0)
-//    }
-//}
-
 extension LinearGradient {
     init(_ colors: Color...) {
         self.init(gradient: Gradient(colors: colors), startPoint: .top, endPoint: .bottom)
@@ -43,50 +29,12 @@ extension Color {
     static let darkestGray = Color(red: 25 / 255, green: 25 / 255, blue: 30 / 255)
 }
 
-extension String {
-
-    // formatting text for currency textField
-    func currencyInputFormatting() -> String {
-
-        var number: NSNumber!
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currencyAccounting
-        formatter.currencySymbol = "$"
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-
-        var amountWithPrefix = self
-
-        // remove from String: "$", ".", ","
-        let regex = try! NSRegularExpression(pattern: "[^0-9]", options: .caseInsensitive)
-        amountWithPrefix = regex.stringByReplacingMatches(in: amountWithPrefix, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count), withTemplate: "")
-
-        let double = (amountWithPrefix as NSString).doubleValue
-        number = NSNumber(value: (double / 100))
-
-        // if first number is 0 or all numbers were deleted
-        guard number != 0 as NSNumber else {
-            return ""
-        }
-
-        return formatter.string(from: number)!
-    }
-}
-
-//extension UIView {
-//    func getImage(rect: CGRect) -> UIImage {
-//        let renderer = UIGraphicsImageRenderer(bounds: rect)
-//        return renderer.image { rendererContext in
-//            layer.render(in: rendererContext.cgContext)
-//        }
-//    }
-//}
-
 extension UserDefaults {
 
     struct Keys {
         static let isRoundResultsUp = "isRoundResultsUp"
         static let isRememberLastTip = "isRememberLastTip"
+        static let lastTip = "lastTip"
     }
     
     static var isRoundResultsUp: Bool {
@@ -106,5 +54,53 @@ extension UserDefaults {
             UserDefaults.standard.set(newValue, forKey: Keys.isRememberLastTip)
         }
     }
+    
+    static var lastTip: Double {
+        get{
+            return UserDefaults.standard.double(forKey: Keys.lastTip)
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: Keys.lastTip)
+        }
+    }
 }
 
+
+//extension String {
+//
+//    // formatting text for currency textField
+//    func currencyInputFormatting() -> String {
+//
+//        var number: NSNumber!
+//        let formatter = NumberFormatter()
+//        formatter.numberStyle = .currencyAccounting
+//        formatter.currencySymbol = "$"
+//        formatter.maximumFractionDigits = 2
+//        formatter.minimumFractionDigits = 2
+//
+//        var amountWithPrefix = self
+//
+//        // remove from String: "$", ".", ","
+//        let regex = try! NSRegularExpression(pattern: "[^0-9]", options: .caseInsensitive)
+//        amountWithPrefix = regex.stringByReplacingMatches(in: amountWithPrefix, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count), withTemplate: "")
+//
+//        let double = (amountWithPrefix as NSString).doubleValue
+//        number = NSNumber(value: (double / 100))
+//
+//        // if first number is 0 or all numbers were deleted
+//        guard number != 0 as NSNumber else {
+//            return ""
+//        }
+//
+//        return formatter.string(from: number)!
+//    }
+//}
+
+//extension UIView {
+//    func getImage(rect: CGRect) -> UIImage {
+//        let renderer = UIGraphicsImageRenderer(bounds: rect)
+//        return renderer.image { rendererContext in
+//            layer.render(in: rendererContext.cgContext)
+//        }
+//    }
+//}
