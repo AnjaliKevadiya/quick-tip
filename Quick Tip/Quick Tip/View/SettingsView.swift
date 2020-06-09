@@ -12,6 +12,7 @@ struct SettingsView: View {
     
     @ObservedObject var tipViewModel = TipViewModel()
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var shareApp: Bool = false
 
@@ -132,7 +133,7 @@ struct SettingsView: View {
                             ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
                             .padding(.trailing, 10)
 
-                            Text("Share")
+                            Text("Tell a Friend")
                             .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .regular, design: .rounded))
 
                             Spacer()
@@ -158,17 +159,21 @@ struct SettingsView: View {
                     .padding(.vertical, Variable.hasSafeArea ? 0 : 15)
             }
             .navigationBarTitle(Text("Settings"), displayMode: Variable.hasSafeArea ? .large : .inline)
-//            .navigationBarItems(trailing: Button(action: {
-//                print("pressed")
-//            }, label: {
-//                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-//                        .mask(Image(systemName: "xmark")
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                    ).frame(width: Variable.iPhoneSE ? 18 : 15, height: Variable.iPhoneSE ? 18 : 15, alignment: .center)
-//                }).buttonStyle(ButtonStyleModifier(scheme: colorScheme))
-//                .padding(.top)
-//            )
+            .navigationBarItems(trailing: Button(action: {
+                print("pressed")
+                
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                        .mask(Image(systemName: "xmark")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    ).frame(width: Variable.hasSafeArea ? 18 : 15, height: Variable.hasSafeArea ? 18 : 15, alignment: .center)
+                })
+                //.buttonStyle(ButtonStyleModifier(scheme: colorScheme))
+                .padding(.top, Variable.hasSafeArea ? 10 : 0)
+                .padding(.trailing, 7)
+            )
         }
     }
 }

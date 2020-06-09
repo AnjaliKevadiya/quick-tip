@@ -72,17 +72,19 @@ struct ContentView: View {
                             Spacer()
                         }
 
-                        if isShowCloseButton {
-                            HStack {
-                                Spacer()
-                                Button(action: closeButtonTap) {
-                                    LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-                                        .mask(Image(systemName: "xmark")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    ).frame(width: Variable.iPhoneSE ? 13 : 15, height: Variable.iPhoneSE ? 13 : 15)
-                                }
-                            }.padding(.horizontal, 20)
+                        if tipViewModel.billAmount.count > 0 {
+                            if isShowCloseButton {
+                                HStack {
+                                    Spacer()
+                                    Button(action: closeButtonTap) {
+                                        LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
+                                            .mask(Image(systemName: "xmark")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                        ).frame(width: Variable.iPhoneSE ? 13 : 15, height: Variable.iPhoneSE ? 13 : 15)
+                                    }
+                                }.padding(.horizontal, 20)
+                            }
                         }
                     }
                     .padding(.bottom, Variable.iPhoneSE ? 5 : Variable.hasSafeArea ? 15 : 10)
@@ -192,7 +194,7 @@ struct ContentView: View {
                                         .disabled((Int(self.tipViewModel.person) != 1) ? false : true)
                                         .opacity((Int(self.tipViewModel.person) != 1) ? 1 : 0.5)
                                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
-                                            .padding(.trailing, Variable.iPhoneSE ? 24 : 30)
+                                        .padding(.trailing, Variable.iPhoneSE ? 24 : 35)
                                     
                                         Button(action: {
                                             self.tipViewModel.increasePerson()
@@ -205,9 +207,9 @@ struct ContentView: View {
                                             ).frame(width: Variable.iPhoneSE ? 18 : 20, height: Variable.iPhoneSE ? 18 : 20, alignment: .center)
                                         })
                                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
-                                        .padding(.leading, Variable.iPhoneSE ? 24 : 30)
                                         .disabled((Int(self.tipViewModel.person) != 99) ? false : true)
                                         .opacity((Int(self.tipViewModel.person) != 99) ? 1 : 0.5)
+                                        .padding(.leading, Variable.iPhoneSE ? 24 : 35)
                                     }
                             }
                         }
@@ -279,7 +281,7 @@ struct ContentView: View {
                                 .mask(Image(systemName: "tray.and.arrow.up.fill")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                            ).frame(width: Variable.iPhoneSE ? 20 : 25, height: Variable.iPhoneSE ? 20 : 25, alignment: .center)
+                            ).frame(width: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, height: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, alignment: .center)
                             })
                             .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                         .sheet(isPresented: $isSharePresented, onDismiss: {
