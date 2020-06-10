@@ -16,10 +16,6 @@ struct SettingsView: View {
     
     @State private var shareApp: Bool = false
 
-//    init() {
-//        UISwitch.appearance().onTintColor = .orange
-//    }
-    
     var body: some View {
         
         NavigationView {
@@ -170,7 +166,6 @@ struct SettingsView: View {
                             .aspectRatio(contentMode: .fit)
                     ).frame(width: Variable.hasSafeArea ? 18 : 15, height: Variable.hasSafeArea ? 18 : 15, alignment: .center)
                 })
-                //.buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                 .padding(.top, Variable.hasSafeArea ? 10 : 0)
                 .padding(.trailing, 7)
             )
