@@ -303,11 +303,10 @@ struct ContentView: View {
                         Button(action: {
                             self.isSettingPresented = true
                         }, label: {
-                            LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
-                                .mask(Image("settings")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            ).frame(width: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, height: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, alignment: .center)
+                            Image("settings")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, height: Variable.iPhone8PlusOrLater ? 25 : Variable.iPhoneSE ? 20 : 22, alignment: .center)
                         })
                         .buttonStyle(ButtonStyleModifier(scheme: colorScheme))
                         .sheet(isPresented: $isSettingPresented, onDismiss: {
