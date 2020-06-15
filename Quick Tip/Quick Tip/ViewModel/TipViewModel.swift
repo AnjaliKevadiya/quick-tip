@@ -28,17 +28,17 @@ class TipViewModel: ObservableObject {
     
     @Published var person: Int = 1
     
-//    @Published var isRememberLastTip: Bool = UserDefaults.isRememberLastTip {
-//        willSet {
-//            UserDefaults.isRememberLastTip = newValue
-//        }
-//    }
-//    
-//    @Published var isRoundResultsUp: Bool = UserDefaults.isRoundResultsUp {
-//        willSet {
-//            UserDefaults.isRoundResultsUp = newValue
-//        }
-//    }
+    @Published var isRememberLastTip: Bool = UserDefaults.isRememberLastTip {
+        willSet {
+            UserDefaults.isRememberLastTip = newValue
+        }
+    }
+    
+    @Published var isRoundResultsUp: Bool = UserDefaults.isRoundResultsUp {
+        willSet {
+            UserDefaults.isRoundResultsUp = newValue
+        }
+    }
 
     private var subCancellable1: AnyCancellable!
     private var validCharSetForAmount = CharacterSet(charactersIn: "1234567890.")

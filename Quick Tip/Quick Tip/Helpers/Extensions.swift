@@ -39,7 +39,7 @@ extension UserDefaults {
     
     static var isRoundResultsUp: Bool {
         get {
-            return UserDefaults.standard.bool(forKey: Keys.isRoundResultsUp) ?? false
+            return UserDefaults.standard.bool(forKey: Keys.isRoundResultsUp) 
         }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.isRoundResultsUp)
@@ -48,7 +48,7 @@ extension UserDefaults {
     
     static var isRememberLastTip: Bool {
         get{
-            return UserDefaults.standard.bool(forKey: Keys.isRememberLastTip) ?? false
+            return UserDefaults.standard.bool(forKey: Keys.isRememberLastTip) 
         }
         set{
             UserDefaults.standard.set(newValue, forKey: Keys.isRememberLastTip)

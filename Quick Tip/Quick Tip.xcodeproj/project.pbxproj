@@ -15,6 +15,7 @@
 		25484A40245B21D5001C39E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25484A3F245B21D5001C39E0 /* Preview Assets.xcassets */; };
 		25484A43245B21D5001C39E0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25484A41245B21D5001C39E0 /* LaunchScreen.storyboard */; };
 		25484A57245BC1D5001C39E0 /* DismissKeyboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25484A55245BC1D5001C39E0 /* DismissKeyboardModifier.swift */; };
+		2575FC372493C99E00FF79E9 /* Quick_TipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2575FC362493C99E00FF79E9 /* Quick_TipUITests.swift */; };
 		257F86A0246217840023A451 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257F869F246217840023A451 /* CurrencyTextField.swift */; };
 		258B1E3B24772CCA004BE308 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B1E3A24772CCA004BE308 /* ActivityViewController.swift */; };
 		258B1E3D24772E48004BE308 /* ButtonStyleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B1E3C24772E48004BE308 /* ButtonStyleModifier.swift */; };
@@ -26,6 +27,16 @@
 		25A9083524819D0200AE30D6 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A9083424819D0200AE30D6 /* Variables.swift */; };
 		25C0789E246B0E9A00209EB2 /* TipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25C0789D246B0E9A00209EB2 /* TipViewModel.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2575FC392493C99E00FF79E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25484A2B245B21D2001C39E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 25484A32245B21D2001C39E0;
+			remoteInfo = "Quick Tip";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		2510944D2460C599002F3E87 /* Embed Watch Content */ = {
@@ -51,6 +62,9 @@
 		25484A42245B21D5001C39E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		25484A44245B21D5001C39E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25484A55245BC1D5001C39E0 /* DismissKeyboardModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissKeyboardModifier.swift; sourceTree = "<group>"; };
+		2575FC342493C99E00FF79E9 /* Quick TipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quick TipUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2575FC362493C99E00FF79E9 /* Quick_TipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quick_TipUITests.swift; sourceTree = "<group>"; };
+		2575FC382493C99E00FF79E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257F869F246217840023A451 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
 		257F86A32463534C0023A451 /* Quick Tip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Quick Tip.entitlements"; sourceTree = "<group>"; };
 		258B1E3A24772CCA004BE308 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +80,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		25484A30245B21D2001C39E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2575FC312493C99E00FF79E9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -89,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				25484A35245B21D2001C39E0 /* Quick Tip */,
+				2575FC352493C99E00FF79E9 /* Quick TipUITests */,
 				25484A34245B21D2001C39E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				25484A33245B21D2001C39E0 /* Quick Tip.app */,
+				2575FC342493C99E00FF79E9 /* Quick TipUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +158,15 @@
 				258B1E4124773460004BE308 /* TextFieldModifier.swift */,
 			);
 			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		2575FC352493C99E00FF79E9 /* Quick TipUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2575FC362493C99E00FF79E9 /* Quick_TipUITests.swift */,
+				2575FC382493C99E00FF79E9 /* Info.plist */,
+			);
+			path = "Quick TipUITests";
 			sourceTree = "<group>";
 		};
 		258B1E4024772F64004BE308 /* View */ = {
@@ -179,6 +211,24 @@
 			productReference = 25484A33245B21D2001C39E0 /* Quick Tip.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2575FC332493C99E00FF79E9 /* Quick TipUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2575FC3D2493C99E00FF79E9 /* Build configuration list for PBXNativeTarget "Quick TipUITests" */;
+			buildPhases = (
+				2575FC302493C99E00FF79E9 /* Sources */,
+				2575FC312493C99E00FF79E9 /* Frameworks */,
+				2575FC322493C99E00FF79E9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2575FC3A2493C99E00FF79E9 /* PBXTargetDependency */,
+			);
+			name = "Quick TipUITests";
+			productName = "Quick TipUITests";
+			productReference = 2575FC342493C99E00FF79E9 /* Quick TipUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -191,6 +241,10 @@
 				TargetAttributes = {
 					25484A32245B21D2001C39E0 = {
 						CreatedOnToolsVersion = 11.3.1;
+					};
+					2575FC332493C99E00FF79E9 = {
+						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 25484A32245B21D2001C39E0;
 					};
 				};
 			};
@@ -208,6 +262,7 @@
 			projectRoot = "";
 			targets = (
 				25484A32245B21D2001C39E0 /* Quick Tip */,
+				2575FC332493C99E00FF79E9 /* Quick TipUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -220,6 +275,13 @@
 				25484A43245B21D5001C39E0 /* LaunchScreen.storyboard in Resources */,
 				25484A40245B21D5001C39E0 /* Preview Assets.xcassets in Resources */,
 				25484A3D245B21D5001C39E0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2575FC322493C99E00FF79E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +310,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2575FC302493C99E00FF79E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2575FC372493C99E00FF79E9 /* Quick_TipUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2575FC3A2493C99E00FF79E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 25484A32245B21D2001C39E0 /* Quick Tip */;
+			targetProxy = 2575FC392493C99E00FF79E9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		25484A41245B21D5001C39E0 /* LaunchScreen.storyboard */ = {
@@ -432,6 +510,42 @@
 			};
 			name = Release;
 		};
+		2575FC3B2493C99E00FF79E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Quick TipUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anjaliKevadiya.Quick-TipUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Quick Tip";
+			};
+			name = Debug;
+		};
+		2575FC3C2493C99E00FF79E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Quick TipUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anjaliKevadiya.Quick-TipUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Quick Tip";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -449,6 +563,15 @@
 			buildConfigurations = (
 				25484A48245B21D5001C39E0 /* Debug */,
 				25484A49245B21D5001C39E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2575FC3D2493C99E00FF79E9 /* Build configuration list for PBXNativeTarget "Quick TipUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2575FC3B2493C99E00FF79E9 /* Debug */,
+				2575FC3C2493C99E00FF79E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

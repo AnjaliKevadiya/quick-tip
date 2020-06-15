@@ -218,7 +218,6 @@ struct ContentView: View {
                     Spacer()
 
                     VStack {
-
                         Text("Per Person")
                             .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                             .padding(.top, 5)
@@ -329,9 +328,9 @@ struct ContentView: View {
             }
             .modifier(DismissKeyboardModifier())
         }
-//        .onReceive([self.$tipViewModel.isRememberLastTip].publisher.first()) { (value) in
-//            print("content receiver tip \(value)")
-//        }
+        .onReceive([self.$tipViewModel.isRememberLastTip].publisher.first()) { (value) in
+            print("content receiver tip \(value)")
+        }
     }
     
     func closeButtonTap() {
@@ -371,6 +370,7 @@ struct ContentView: View {
     }
     
     func todayDate() -> String {
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
