@@ -370,7 +370,7 @@ struct ContentView: View {
     }
     
     func todayDate() -> String {
-
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
