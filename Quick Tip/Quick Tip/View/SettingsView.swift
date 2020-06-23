@@ -140,7 +140,7 @@ struct SettingsView: View {
                         self.shareApp = true
                     }
                     .sheet(isPresented: $shareApp, onDismiss: {
-                        print("Dismiss")
+                        print("Dismiss") 
                         self.shareApp = false
                     }, content: {
                         ActivityViewController(textToShare: """
