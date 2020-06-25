@@ -149,7 +149,7 @@ struct SettingsView: View {
                         https://apple.co/36GmePy
                         """)
                     })
-
+                    
                     Spacer()
                 }.padding(.horizontal, 20)
                     .padding(.vertical, Variable.hasSafeArea ? 0 : 15)
