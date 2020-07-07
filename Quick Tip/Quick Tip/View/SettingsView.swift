@@ -151,7 +151,6 @@ struct SettingsView: View {
                     })
                     
                     Spacer()
-                    
                 }.padding(.horizontal, 20)
                     .padding(.vertical, Variable.hasSafeArea ? 0 : 15)
             }
