@@ -174,13 +174,6 @@ struct SettingsView: View {
     }
 }
 
-//struct SettingsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SettingsView()
-//    }
-//}
-
-
 struct ColoredToggleStyle: ToggleStyle {
     var label = ""
     var onColor = Color(UIColor.green)
