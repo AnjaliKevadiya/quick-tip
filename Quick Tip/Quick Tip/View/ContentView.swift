@@ -83,8 +83,7 @@ struct ContentView: View {
                                                 .aspectRatio(contentMode: .fill)
                                         ).frame(width: Variable.iPhoneSE ? 13 : 15, height: Variable.iPhoneSE ? 13 : 15)
                                     }
-                                }
-                                .padding(.horizontal, 20)
+                                }.padding(.horizontal, 20)
                             }
                         }
                     }
