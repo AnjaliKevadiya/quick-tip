@@ -126,7 +126,7 @@ struct ContentView: View {
                                     .opacity(0.02)
 
                             }.frame(height: 30, alignment: .bottom)
-                                .padding(.top, Variable.iPhoneSE ? 10 : 15)
+                            .padding(.top, Variable.iPhoneSE ? 10 : 15)
 
                         }.padding(.horizontal, 15)
                     }
