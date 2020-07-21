@@ -161,7 +161,8 @@ struct ContentView: View {
                                     .multilineTextAlignment(.trailing)
                                     .foregroundColor(.darkBlueColor)
                                     .lineLimit(1)
-                            }.padding(.horizontal, 15)
+                            }
+                            .padding(.horizontal, 15)
                             Spacer()
                         }
                     }
