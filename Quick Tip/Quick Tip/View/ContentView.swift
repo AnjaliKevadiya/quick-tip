@@ -259,7 +259,8 @@ struct ContentView: View {
                                         .allowsTightening(true)
                                 }
                                 .frame(width: (UIScreen.main.bounds.width - 50) / 2)
-                            }.padding()
+                            }
+                            .padding()
                         }
                         .frame(minWidth:0, maxWidth: .infinity, minHeight: Variable.iPhoneSE ? 80 : 90, maxHeight: Variable.iPhoneSE ? 100 : 120)
 
