@@ -264,7 +264,7 @@ struct ContentView: View {
                         }
                         .frame(minWidth:0, maxWidth: .infinity, minHeight: Variable.iPhoneSE ? 80 : 90, maxHeight: Variable.iPhoneSE ? 100 : 120)
 
-                        .overlay(
+                        .overlay( 
                             RoundedRectangle(cornerRadius: 15)
                                 .stroke(colorScheme == .dark ? Color.darkEnd : Color.offWhite, lineWidth: 2)
                                 .shadow(color: colorScheme == .dark ? Color.darkestGray.opacity(0.5) : Color.white, radius: colorScheme == .dark ? 3 : 2, x: colorScheme == .dark ? -2 : -1, y: colorScheme == .dark ? -2 : -1)
