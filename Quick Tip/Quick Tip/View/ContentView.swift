@@ -325,8 +325,8 @@ struct ContentView: View {
             .navigationBarTitle(Text("Quick Tip"), displayMode: Variable.hasSafeArea ? .large : .inline)
             .navigationBarHidden(self.isNavigationBarHidden)
             .onAppear {
+                
                 self.isNavigationBarHidden = Variable.iPhoneSE ? true : false
-
                 StoreKitHelper.displayStoreKit()
             }
             .modifier(DismissKeyboardModifier())
