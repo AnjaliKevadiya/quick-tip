@@ -341,6 +341,7 @@ struct ContentView: View {
     }
 
     func clearEverythingTap() {
+        
         tipViewModel.billAmount = ""
         self.refreshTextField.toggle()
         tipViewModel.person = 1//"1"
