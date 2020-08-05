@@ -337,7 +337,6 @@ struct ContentView: View {
     }
     
     func closeButtonTap() {
-        
         tipViewModel.billAmount = ""
     }
 
