@@ -111,6 +111,8 @@ struct ContentView: View {
 //                                        .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
 //                                        .foregroundColor(.darkBlueColor)
 //                                } else {
+                                
+                                
                                     Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
                                         .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.darkBlueColor)
