@@ -138,7 +138,6 @@ struct ContentView: View {
 
                     ZStack {
                         if Variable.iPhone8PlusOrLater {
-                            
                             VStack{
                                 Text("Total Amount")
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
