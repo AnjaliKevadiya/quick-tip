@@ -137,7 +137,6 @@ struct ContentView: View {
                     Spacer()
 
                     ZStack {
-                        
                         if Variable.iPhone8PlusOrLater {
                             VStack{
                                 Text("Total Amount")
