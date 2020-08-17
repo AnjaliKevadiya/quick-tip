@@ -137,6 +137,7 @@ struct ContentView: View {
                     Spacer()
 
                     ZStack {
+                        
                         if Variable.iPhone8PlusOrLater {
                             VStack{
                                 Text("Total Amount")
@@ -151,7 +152,6 @@ struct ContentView: View {
                             Spacer()
                         } else {
                             HStack{
-
                                 Text("Total Amount")
                                     .font(.system(size: Variable.iPhoneSE ? 17 : 19, weight: .bold, design: .rounded))
                                     .frame(width: (UIScreen.main.bounds.width - 40) / 2)
