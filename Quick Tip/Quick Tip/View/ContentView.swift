@@ -151,6 +151,7 @@ struct ContentView: View {
                             }
                             Spacer()
                         } else {
+                            
                             HStack{
                                 Text("Total Amount")
                                     .font(.system(size: Variable.iPhoneSE ? 17 : 19, weight: .bold, design: .rounded))
