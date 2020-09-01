@@ -173,7 +173,6 @@ struct ContentView: View {
                     .padding(.bottom, Variable.hasSafeArea ? 10 : 7)
 
                     ZStack{
-                        
                         RoundedRectangleView(cornerRadius: 25)
                         .frame(minWidth:0, maxWidth: Variable.iPhoneSE ? 210 : 250, minHeight: Variable.iPhoneSE ? 100 : 106, maxHeight: 126)
 
