@@ -184,6 +184,7 @@ struct ContentView: View {
                                 .frame(minWidth: 0, maxWidth: .infinity)
 
                             ZStack {
+                                
                                 NumberOfPersonsView(value: $tipViewModel.person)
                                 
                                 HStack {
