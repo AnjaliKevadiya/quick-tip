@@ -225,6 +225,7 @@ struct ContentView: View {
                     Spacer()
 
                     VStack {
+                        
                         Text("Per Person")
                             .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                             .padding(.top, 5)
