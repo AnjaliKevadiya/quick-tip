@@ -284,6 +284,7 @@ struct ContentView: View {
                     Spacer()
 
                     HStack {
+                        
                         Button(action: shareBill, label: {
                             LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
                                 .mask(Image(systemName: "tray.and.arrow.up.fill")
