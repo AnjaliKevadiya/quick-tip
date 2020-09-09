@@ -231,7 +231,6 @@ struct ContentView: View {
                             .padding(.top, 5)
 
                         VStack {
-
                             HStack {
                                 VStack {
                                     Text("Tip")
