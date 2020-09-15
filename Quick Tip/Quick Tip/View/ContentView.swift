@@ -188,8 +188,7 @@ struct ContentView: View {
                                 NumberOfPersonsView(value: $tipViewModel.person)
                                 
                                 HStack {
-                                        
-                                        Button(action: {
+\                                        Button(action: {
                                             self.tipViewModel.removePerson()
                                         }, label: {
                                             LinearGradient(Color.darkBlueColor, Color.lightBlueColor)
