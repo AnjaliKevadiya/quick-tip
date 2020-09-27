@@ -40,6 +40,7 @@ struct ContentView: View {
         NavigationView {
             
             ZStack{
+                
                 if colorScheme == .dark {
                     Color.darkEnd
                         .edgesIgnoringSafeArea(.all)
