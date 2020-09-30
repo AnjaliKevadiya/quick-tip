@@ -56,6 +56,7 @@ struct ContentView: View {
                 VStack {
                     
                     ZStack{
+                        
                         TextField("Enter bill amount" + (refreshTextField ? "" : " "), text: $tipViewModel.billAmount, onEditingChanged: { _ in
                             self.isShowCloseButton.toggle()
                         })
