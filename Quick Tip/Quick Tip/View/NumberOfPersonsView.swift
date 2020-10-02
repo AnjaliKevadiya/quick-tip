@@ -10,6 +10,8 @@ import SwiftUI
 
 struct NumberOfPersonsView: View {
 
+    @Environment(\.colorScheme) var colorScheme
+
         @Binding var value: Int
         
         var body: some View {
@@ -20,8 +22,9 @@ struct NumberOfPersonsView: View {
                         .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .semibold, design: .rounded))
                     }
             }.pickerStyle(WheelPickerStyle())
+            .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
             .labelsHidden()
-            .frame(width: Variable.iPhoneSE ? 36 : 50, height: 30)
-            .cornerRadius(15)
+            .frame(width: Variable.iPhoneSE ? 36 : 50, height: 40)
+            .cornerRadius(10)
         }
 }

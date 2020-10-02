@@ -114,7 +114,6 @@ struct ContentView: View {
 //                                        .foregroundColor(.darkBlueColor)
 //                                } else {
                                 
-                                
                                     Text("$ \(tipViewModel.tipAmount, specifier: "%.2f")")
                                         .font(.system(size: Variable.iPhoneSE ? 16 : 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.darkBlueColor)
@@ -292,7 +291,24 @@ struct ContentView: View {
                             print("Dismiss")
                             self.isSharePresented = false
                         }, content: {
-                            ActivityViewController(textToShare: self.textToShare)
+                            
+                            let billAmount = String(format: "%.2f", Double(self.tipViewModel.billAmount) ?? 0.00)
+                            let tipAmount = String(format: "%.2f", self.tipViewModel.tipAmount)
+                            let totalPerPerson = String(format: "%.2f", self.tipViewModel.totalPerPerson)
+                            let totalAmount = String(format: "%.2f", self.tipViewModel.totalAmount)
+
+                            let textToShare = """
+                            Quick Tip - Calculator
+                            \(todayDate())
+                            
+                            Bill Amount - $ \(billAmount)
+                            Tip (\(self.tipViewModel.tipPercentage) %) - $ \(tipAmount)
+                            Split for \(self.tipViewModel.person) - $ \(totalPerPerson)
+                            
+                            TOTAL TO PAY - $ \(totalAmount)
+                            """
+
+                            ActivityViewController(textToShare: textToShare)
                         })
                         Spacer()
 
@@ -357,21 +373,21 @@ struct ContentView: View {
         
         self.isSharePresented = true
         
-        let billAmount = String(format: "%.2f", Double(self.tipViewModel.billAmount) ?? 0.00)
-        let tipAmount = String(format: "%.2f", self.tipViewModel.tipAmount)
-        let totalPerPerson = String(format: "%.2f", self.tipViewModel.totalPerPerson)
-        let totalAmount = String(format: "%.2f", self.tipViewModel.totalAmount)
-
-        self.textToShare = """
-        Quick Tip - Calculator
-        \(todayDate())
-        
-        Bill Amount - $ \(billAmount)
-        Tip (\(self.tipViewModel.tipPercentage) %) - $ \(tipAmount)
-        Split for \(self.tipViewModel.person) - $ \(totalPerPerson)
-        
-        TOTAL TO PAY - $ \(totalAmount)
-        """
+//        let billAmount = String(format: "%.2f", Double(self.tipViewModel.billAmount) ?? 0.00)
+//        let tipAmount = String(format: "%.2f", self.tipViewModel.tipAmount)
+//        let totalPerPerson = String(format: "%.2f", self.tipViewModel.totalPerPerson)
+//        let totalAmount = String(format: "%.2f", self.tipViewModel.totalAmount)
+//
+//        self.textToShare = """
+//        Quick Tip - Calculator
+//        \(todayDate())
+//
+//        Bill Amount - $ \(billAmount)
+//        Tip (\(self.tipViewModel.tipPercentage) %) - $ \(tipAmount)
+//        Split for \(self.tipViewModel.person) - $ \(totalPerPerson)
+//
+//        TOTAL TO PAY - $ \(totalAmount)
+//        """
     }
     
     func todayDate() -> String {
