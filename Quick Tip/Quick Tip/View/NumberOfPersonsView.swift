@@ -24,7 +24,7 @@ struct NumberOfPersonsView: View {
             }.pickerStyle(WheelPickerStyle())
             .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
             .labelsHidden()
-            .frame(width: Variable.iPhoneSE ? 36 : 50, height: 40)
-            .cornerRadius(10)
+            .frame(width: Variable.iPhoneSE ? 36 : 40, height: 30)
+            .cornerRadius(5)
         }
 }
