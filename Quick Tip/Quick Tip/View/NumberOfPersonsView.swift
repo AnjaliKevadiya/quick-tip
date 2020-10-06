@@ -25,6 +25,6 @@ struct NumberOfPersonsView: View {
             .background(colorScheme == .dark ? Color.darkEnd : Color.offWhite)
             .labelsHidden()
             .frame(width: Variable.iPhoneSE ? 36 : 40, height: 30)
-            .cornerRadius(5)
+            .cornerRadius(15)
         }
 }
