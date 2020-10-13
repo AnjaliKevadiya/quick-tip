@@ -21,7 +21,6 @@ struct SettingsView: View {
         NavigationView {
             
             ZStack() {
-                
                 if colorScheme == .dark {
                     Color.darkEnd
                         .edgesIgnoringSafeArea(.all)
