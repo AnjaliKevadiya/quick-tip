@@ -30,6 +30,7 @@ struct SettingsView: View {
                     Color.offWhite
                         .edgesIgnoringSafeArea(.all)
                 }
+                
                 VStack {
                     
                     if Variable.hasSafeArea {
