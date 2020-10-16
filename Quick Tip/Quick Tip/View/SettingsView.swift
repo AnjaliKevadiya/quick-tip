@@ -32,7 +32,6 @@ struct SettingsView: View {
                 }
                 
                 VStack {
-                    
                     if Variable.hasSafeArea {
                         Divider()
                             .padding(.bottom, 3)
