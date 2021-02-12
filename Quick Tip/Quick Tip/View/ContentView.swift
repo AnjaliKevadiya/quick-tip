@@ -349,9 +349,9 @@ struct ContentView: View {
             }
             .modifier(DismissKeyboardModifier())
         }
-        .onReceive([self.$tipViewModel.isRememberLastTip].publisher.first()) { (value) in
-            print("content receiver tip \(value)")
-        }
+//        .onReceive([self.$tipViewModel.isRememberLastTip].publisher.first()) { (value) in
+//            print("content receiver tip \(value)")
+//        }
     }
     
     func closeButtonTap() {
